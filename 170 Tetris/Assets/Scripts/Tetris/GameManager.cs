@@ -146,13 +146,14 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            //rotate clockwise
             if (actionRotateClockwise.WasPressedThisFrame())
             {
                 if(activePiece.Rotate(1)) {
                     CheckStallMoves();
                 }
             }
-            else if (actionRotateCounterclockwise.WasPressedThisFrame())
+            else if (actionRotateCounterclockwise.WasPressedThisFrame()) //rotate counterclockwise
             {
                 if (activePiece.Rotate(-1))
                 {
@@ -179,7 +180,7 @@ public class GameManager : MonoBehaviour
                     activePiece.Move(Vector2Int.down);
                     gravityApplied -= 1.0f;
                     lockDelayCurrent = 0.0f;
-                    stallMoves = 0;
+                    //stallMoves = 0;
                 }
             }
             else
@@ -241,7 +242,8 @@ public class GameManager : MonoBehaviour
 
     private void HardDrop()
     {
-
+        while(activePiece.Move(Vector2Int.down)) { }
+        PlacePiece();
     }
 
     private void CheckStallMoves()
@@ -268,26 +270,33 @@ public class Piece
 
     public bool Rotate(int dir)
     {
-        pieceData.GetCenter();
-
-        Vector2Int rotation; // offset blocks by center, rotate all blocks by mutli either (-1, 1) or (1, -1) based on rotation, add center back to all blocks, then apply offests appropriately
-        switch(this.dir) // dir 0 -> 0, 1 -> R, 2 -> 2, 3 -> L
-        {
-            case 0:
-                break;
-        }
+        RotateBlocks(dir);
 
         int i = 0;
-        Vector2Int[] offsets = pieceData.GetWallkickOffests()[dir].offsets;
-        while (Move(offsets[i]) == false)
+        Vector2Int[] currentOffsets = pieceData.GetWallkickOffests()[this.dir].offsets;
+        Vector2Int[] rotateOffsets = pieceData.GetWallkickOffests()[(this.dir + dir + 4) % 4].offsets;
+        while (Move(currentOffsets[i] - rotateOffsets[i]) == false)
         {
-            if(i >= offsets.Length)
+            i++;
+            if (i >= currentOffsets.Length)
             {
+                RotateBlocks(-dir);
                 return false;
             }
         }
 
-        return false;
+        this.dir = (this.dir + dir + 4) % 4;
+        return true;
+    }
+
+    private void RotateBlocks(int dir)
+    {
+        foreach(PieceBlock block in pieceData.GetBlocks())
+        {
+            block.position -= pieceData.GetCenter();
+            block.position = new Vector2Int(block.position.y, -block.position.x) * dir;
+            block.position += pieceData.GetCenter();
+        }
     }
 
     public bool Move(Vector2Int offset)

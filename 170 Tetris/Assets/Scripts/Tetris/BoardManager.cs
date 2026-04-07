@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -23,9 +24,7 @@ public class BoardManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        blocks.SetTile(new Vector3Int(0, 0, 0), tile);
-        blocks.SetTile(new Vector3Int(0, 20, 0), tile);
-        blocks.SetTile(new Vector3Int(9, 0, 0), tile);
+        
     }
 
     // Update is called once per frame
@@ -69,14 +68,53 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void CheckLineClear()
+    public int CheckLineClear()
     {
-
+        int score = 0;
+        for (int i = boardHeight; i >= 0; i--)
+        {
+            if(CheckRowFull(i))
+            {
+                score += ClearLine(i);
+            }
+        }
+        return score;
     }
 
-    private void ClearLine()
+    private bool CheckRowFull(int row)
     {
+        for(int i = 0; i < boardWidth; i++)
+        {
+            if(blocks.GetTile(new Vector3Int(i, row, 0)) == null)
+            {
+                return false;
+            }
+        }
 
+        return true;
+    }
+
+    private int ClearLine(int row)
+    {
+        int score = 0;
+        for (int i = 0; i < boardWidth; i++)
+        {
+            Block block = (Block)(blocks.GetTile(new Vector3Int(i, row, 0)));
+            score += block.ScoreBlock(1);
+            blocks.SetTile(new Vector3Int(i, row, 0), null);
+        }
+
+        //TileBase[] tiles = blocks.GetTilesBlock(new BoundsInt(new Vector3Int(0, row + 1), new Vector3Int(boardWidth, boardHeight + 5)));
+        //blocks.SetTilesBlock(new BoundsInt(new Vector3Int(0, row), new Vector3Int(boardWidth, boardHeight + 4)), tiles);
+        for (int i = row; i < boardHeight + 5; i++)
+        {
+            for (int k = 0; k < boardWidth; k++)
+            {
+                blocks.SetTile(new Vector3Int(k, i), blocks.GetTile(new Vector3Int(k, i + 1, 0)));
+                blocks.SetTile(new Vector3Int(k, i + 1), null);
+            }
+        }
+        return score;
     }
 
     private void ClearTile(Vector2Int tile)

@@ -15,7 +15,7 @@ public class PieceData : ScriptableObject
     [SerializeField]
     private PieceBlock[] blocks;
 
-    private static readonly Vector2Int[] baseOffsets1 = {new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0)};
+    /*private static readonly Vector2Int[] baseOffsets1 = {new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0)};
     private static readonly Vector2Int[] baseOffsets2 = { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(1, -1), new Vector2Int(0, 2), new Vector2Int(1, 2) };
     private static readonly Vector2Int[] baseOffsets3 = { new Vector2Int(0, 0), new Vector2Int(-1, 0), new Vector2Int(-1, -1), new Vector2Int(0, 2), new Vector2Int(-1, 2) };
     
@@ -25,20 +25,20 @@ public class PieceData : ScriptableObject
         new WallkickOffests(baseOffsets2),
         new WallkickOffests(baseOffsets1),
         new WallkickOffests(baseOffsets3),
-    };
+    };*/
 
     //https://tetris.wiki/Super_Rotation_System
     //The first offset is always applied (this ensures I and O pieces rotate correctly)
     //and loops through the others if the rotation is obstructed
     [SerializeField]
-    private WallkickOffests[] wallkickOffsets = defaultWallkickOffsets;
+    private WallkickOffests[] wallkickOffsets;
 
     public PieceBlock[] GetBlocks()
     {
         return blocks;
     }
 
-    public Vector2 GetCenter()
+    public Vector2Int GetCenter()
     {
         return center;
     }
