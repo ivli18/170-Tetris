@@ -69,7 +69,7 @@ public class PieceBlock
     [SerializeField]
     public Vector2Int position;
     [SerializeField]
-    private Block block;
+    public Block block;
 }
 
 [System.Serializable]
