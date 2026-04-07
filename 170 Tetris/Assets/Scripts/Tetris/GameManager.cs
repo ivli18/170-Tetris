@@ -15,9 +15,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private List<PieceData> bagFull;
     private List<PieceData> bagCurrent = new List<PieceData>();
-    private PieceData heldPiece = null;
     private List<PieceData> previewPieces = new List<PieceData>();
     private Piece activePiece = null;
+    private PieceData heldPiece = null;
+    private bool holdUsed = false;
 
     private int boardHeight = 20; //base tetris is 20 for the visible height, and 40 is the true height; here it will be higher like 50-70
     private int boardWidth = 10; // hesitant to say this should be changable
@@ -84,7 +85,27 @@ public class GameManager : MonoBehaviour
         {
             boards[activeBoard].ClearPiece(activePiece);
 
-            if(actionHardDrop.WasPressedThisFrame())
+            if (actionHold.WasPressedThisFrame())
+            {
+                if(!holdUsed)
+                {
+                    holdUsed = true;
+                    Piece storedPiece = activePiece;
+                    if (heldPiece != null)
+                    {
+                        SpawnPiece(heldPiece);
+                    }
+                    else
+                    {
+                        SpawnPiece();
+                    }
+                    storedPiece.ResetPieceData();
+                    heldPiece = storedPiece.pieceData;
+                    return;
+                }
+            }
+
+            if (actionHardDrop.WasPressedThisFrame())
             {
                 HardDrop();
                 return;
@@ -180,7 +201,7 @@ public class GameManager : MonoBehaviour
                     activePiece.Move(Vector2Int.down);
                     gravityApplied -= 1.0f;
                     lockDelayCurrent = 0.0f;
-                    //stallMoves = 0;
+                    stallMoves = 0;
                 }
             }
             else
@@ -216,7 +237,21 @@ public class GameManager : MonoBehaviour
             ShufflePieces();
         }
 
-        activePiece.position = new Vector2Int(4, 20);
+        activePiece.position = new Vector2Int(4, boardHeight) - activePiece.pieceData.GetCenter();
+        boards[activeBoard].SpawnPiece(activePiece);
+    }
+
+    private void SpawnPiece(PieceData piece)
+    {
+        lockDelayCurrent = 0.0f;
+        stallMoves = 0;
+        gravityApplied = 0.0f;
+
+        activePiece = new Piece();
+        activePiece.board = boards[activeBoard];
+        activePiece.pieceData = piece;
+
+        activePiece.position = new Vector2Int(4, boardHeight) - activePiece.pieceData.GetCenter();
         boards[activeBoard].SpawnPiece(activePiece);
     }
 
@@ -238,6 +273,7 @@ public class GameManager : MonoBehaviour
         boards[activeBoard].DrawPiece(activePiece);
         activePiece = null;
         boards[activeBoard].CheckLineClear();
+        holdUsed = false;
     }
 
     private void HardDrop()
@@ -321,5 +357,14 @@ public class Piece
         }
 
         return true;
+    }
+
+    public void ResetPieceData()
+    {
+        while(dir != 0)
+        {
+            RotateBlocks(-1);
+            dir -= 1;
+        }
     }
 }
