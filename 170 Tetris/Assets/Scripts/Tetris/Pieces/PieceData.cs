@@ -8,6 +8,7 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "PieceData", menuName = "Scriptable Objects/PieceData")]
 public class PieceData : ScriptableObject
 {
+    //Define the central pivot of the piece, must be an integer
     [SerializeField]
     private Vector2Int center;
 
@@ -18,7 +19,6 @@ public class PieceData : ScriptableObject
     private static readonly Vector2Int[] baseOffsets2 = { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(1, -1), new Vector2Int(0, 2), new Vector2Int(1, 2) };
     private static readonly Vector2Int[] baseOffsets3 = { new Vector2Int(0, 0), new Vector2Int(-1, 0), new Vector2Int(-1, -1), new Vector2Int(0, 2), new Vector2Int(-1, 2) };
     
-    //https://tetris.wiki/Super_Rotation_System
     private static readonly WallkickOffests[] defaultWallkickOffsets =
     {
         new WallkickOffests(baseOffsets1),
@@ -27,8 +27,26 @@ public class PieceData : ScriptableObject
         new WallkickOffests(baseOffsets3),
     };
 
+    //https://tetris.wiki/Super_Rotation_System
+    //The first offset is always applied (this ensures I and O pieces rotate correctly)
+    //and loops through the others if the rotation is obstructed
     [SerializeField]
     private WallkickOffests[] wallkickOffsets = defaultWallkickOffsets;
+
+    public PieceBlock[] GetBlocks()
+    {
+        return blocks;
+    }
+
+    public Vector2 GetCenter()
+    {
+        return center;
+    }
+
+    public WallkickOffests[] GetWallkickOffests()
+    {
+        return wallkickOffsets;
+    }
 
     #region Editor Menu
 
