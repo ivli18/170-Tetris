@@ -104,8 +104,6 @@ public class BoardManager : MonoBehaviour
             blocks.SetTile(new Vector3Int(i, row, 0), null);
         }
 
-        //TileBase[] tiles = blocks.GetTilesBlock(new BoundsInt(new Vector3Int(0, row + 1), new Vector3Int(boardWidth, boardHeight + 5)));
-        //blocks.SetTilesBlock(new BoundsInt(new Vector3Int(0, row), new Vector3Int(boardWidth, boardHeight + 4)), tiles);
         for (int i = row; i < boardHeight + 5; i++)
         {
             for (int k = 0; k < boardWidth; k++)

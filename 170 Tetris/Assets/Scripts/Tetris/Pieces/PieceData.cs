@@ -8,6 +8,15 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "PieceData", menuName = "Scriptable Objects/PieceData")]
 public class PieceData : ScriptableObject
 {
+    /* HOW TO MAKE A PIECE
+     * - duplicate one of the existing pieces (other than O and I in order to have rotation data correct)
+     * - set blocks in the array
+     * - IMPORTANT: (0, 0) on a block is the BOTTOM LEFT position; positive integers for x/y are right/up repsectively
+     * - set the block asset (new blocks can be made from the create menu or duplicating an existing one)
+     * - if you want to make a special block, make a scriptable object that derrives from the Block class (ill make an example one at some point)
+     * - set the center pivot; this determines where the piece rotates from. the center must be a full integer, rotation offsets must be used to correct decimal centers (like O and I).
+     */
+    
     //Define the central pivot of the piece, must be an integer
     [SerializeField]
     private Vector2Int center;
