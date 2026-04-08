@@ -259,7 +259,7 @@ public class GameManager : MonoBehaviour
 
         activePiece = new Piece();
         activePiece.board = boards[activeBoard];
-        activePiece.pieceData = piece;
+        activePiece.pieceData = Instantiate(piece);
 
         ghostPiece = new Piece();
         ghostPiece.board = boards[activeBoard];
