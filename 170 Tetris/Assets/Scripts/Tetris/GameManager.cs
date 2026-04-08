@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         {
             previewPieces.Add(bagCurrent[0]);
             bagCurrent.RemoveAt(0);
-            if(bagCurrent.Count >= 0)
+            if(bagCurrent.Count <= 0)
             {
                 ShufflePieces();
             }
@@ -284,7 +284,7 @@ public class GameManager : MonoBehaviour
 
         foreach (PieceData piece in bagFull)
         {
-            bagCurrent.Insert(Random.Range(0, bagCurrent.Count), piece);
+            bagCurrent.Insert(Random.Range(0, bagCurrent.Count + 1), piece);
         }
     }
 
