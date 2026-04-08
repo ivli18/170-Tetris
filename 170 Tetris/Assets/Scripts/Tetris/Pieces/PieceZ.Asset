@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PieceData
   center: {x: 1, y: 0}
   blocks:
-  - position: {x: 1, y: 0}
-    block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
-  - position: {x: 2, y: 0}
-    block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
   - position: {x: 0, y: 1}
     block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
   - position: {x: 1, y: 1}
+    block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
+  - position: {x: 1, y: 0}
+    block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
+  - position: {x: 2, y: 0}
     block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
   wallkickOffsets:
   - offsets:

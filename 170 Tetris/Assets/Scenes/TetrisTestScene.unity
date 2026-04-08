@@ -290,11 +290,11 @@ MonoBehaviour:
   bagFull:
   - {fileID: 11400000, guid: bc07f914b5d13b141b6b2ca0972abbe2, type: 2}
   - {fileID: 11400000, guid: 966540a2bf6aaae4c8b46a8bf844817c, type: 2}
-  - {fileID: 11400000, guid: 66b5944d0b727bc4ba21ef593cc48d09, type: 2}
-  - {fileID: 11400000, guid: 51ef9d66cb7d2394baf2a5ac7cab4cee, type: 2}
   - {fileID: 11400000, guid: f3ec79fdae03bef4888bbb64ed0555d8, type: 2}
-  - {fileID: 11400000, guid: 06aa3d3fa40c02e4589c994b9435ca68, type: 2}
+  - {fileID: 11400000, guid: 51ef9d66cb7d2394baf2a5ac7cab4cee, type: 2}
   - {fileID: 11400000, guid: 7a43b01cd24017449882642dcafca28a, type: 2}
+  - {fileID: 11400000, guid: 06aa3d3fa40c02e4589c994b9435ca68, type: 2}
+  - {fileID: 11400000, guid: 66b5944d0b727bc4ba21ef593cc48d09, type: 2}
 --- !u!4 &462505974
 Transform:
   m_ObjectHideFlags: 0
@@ -342,6 +342,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoardManager
   blocks: {fileID: 0}
   tile: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
+  boardHeight: 20
+  boardWidth: 10
 --- !u!156049354 &476479340
 Grid:
   m_ObjectHideFlags: 0
