@@ -67,6 +67,10 @@ public class GameManager : MonoBehaviour
         {
             previewPieces.Add(bagCurrent[0]);
             bagCurrent.RemoveAt(0);
+            if(bagCurrent.Count >= 0)
+            {
+                ShufflePieces();
+            }
         }
     }
 
@@ -114,76 +118,8 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
-            // input left
-            if(actionShiftLeft.WasPressedThisFrame())
-            {
-                autoshiftDelay = 0.0f;
-                autorepeatRate = 0.0f;
-                if(activePiece.Move(Vector2Int.left))
-                {
-                    CheckStallMoves();
-                }
-            }
-            else if (actionShiftLeft.IsPressed())
-            {
-                autoshiftDelay += 1.0f;
-                if(autoshiftDelay >= AUTOSHIFT_DELAY)
-                {
-                    autorepeatRate += 1.0f;
-                    if(autorepeatRate >= AUTOREPEAT_RATE) {
-                        if(activePiece.Move(Vector2Int.left))
-                        {
-                            CheckStallMoves();
-                        }
-                        autorepeatRate = 0.0f;
-                    }
-                }
-            }
-
-            // input right
-            if (actionShiftRight.WasPressedThisFrame())
-            {
-                autoshiftDelay = 0.0f;
-                autorepeatRate = 0.0f;
-                if(activePiece.Move(Vector2Int.right))
-                {
-                    CheckStallMoves();
-                }
-            }
-            else if (actionShiftRight.IsPressed())
-            {
-                autoshiftDelay += 1.0f;
-                if (autoshiftDelay >= AUTOSHIFT_DELAY)
-                {
-                    if (autoshiftDelay >= AUTOSHIFT_DELAY)
-                    {
-                        autorepeatRate += 1.0f;
-                        if (autorepeatRate >= AUTOREPEAT_RATE)
-                        {
-                            if(activePiece.Move(Vector2Int.right))
-                            {
-                                CheckStallMoves();
-                            }
-                            autorepeatRate = 0.0f;
-                        }
-                    }
-                }
-            }
-
-            //rotate clockwise
-            if (actionRotateClockwise.WasPressedThisFrame())
-            {
-                if(activePiece.Rotate(1)) {
-                    CheckStallMoves();
-                }
-            }
-            else if (actionRotateCounterclockwise.WasPressedThisFrame()) //rotate counterclockwise
-            {
-                if (activePiece.Rotate(-1))
-                {
-                    CheckStallMoves();
-                }
-            }
+            InputLR();
+            InputRotate();
 
             //check to see if space below active piece is occupied
             if (activePiece.CheckForEmptySpace(Vector2Int.down))
@@ -219,6 +155,85 @@ public class GameManager : MonoBehaviour
 
             DrawGhostPiece();
             boards[activeBoard].DrawPiece(activePiece);
+        }
+    }
+
+    private void InputLR()
+    {
+        // input left
+        if (actionShiftLeft.WasPressedThisFrame())
+        {
+            autoshiftDelay = 0.0f;
+            autorepeatRate = 0.0f;
+            if (activePiece.Move(Vector2Int.left))
+            {
+                CheckStallMoves();
+            }
+        }
+        else if (actionShiftLeft.IsPressed())
+        {
+            autoshiftDelay += 1.0f;
+            if (autoshiftDelay >= AUTOSHIFT_DELAY)
+            {
+                autorepeatRate += 1.0f;
+                if (autorepeatRate >= AUTOREPEAT_RATE)
+                {
+                    if (activePiece.Move(Vector2Int.left))
+                    {
+                        CheckStallMoves();
+                    }
+                    autorepeatRate = 0.0f;
+                }
+            }
+        }
+
+        // input right
+        if (actionShiftRight.WasPressedThisFrame())
+        {
+            autoshiftDelay = 0.0f;
+            autorepeatRate = 0.0f;
+            if (activePiece.Move(Vector2Int.right))
+            {
+                CheckStallMoves();
+            }
+        }
+        else if (actionShiftRight.IsPressed())
+        {
+            autoshiftDelay += 1.0f;
+            if (autoshiftDelay >= AUTOSHIFT_DELAY)
+            {
+                if (autoshiftDelay >= AUTOSHIFT_DELAY)
+                {
+                    autorepeatRate += 1.0f;
+                    if (autorepeatRate >= AUTOREPEAT_RATE)
+                    {
+                        if (activePiece.Move(Vector2Int.right))
+                        {
+                            CheckStallMoves();
+                        }
+                        autorepeatRate = 0.0f;
+                    }
+                }
+            }
+        }
+    }
+
+    private void InputRotate()
+    {
+        //rotate clockwise
+        if (actionRotateClockwise.WasPressedThisFrame())
+        {
+            if (activePiece.Rotate(1))
+            {
+                CheckStallMoves();
+            }
+        }
+        else if (actionRotateCounterclockwise.WasPressedThisFrame()) //rotate counterclockwise
+        {
+            if (activePiece.Rotate(-1))
+            {
+                CheckStallMoves();
+            }
         }
     }
 
@@ -326,6 +341,12 @@ public class GameManager : MonoBehaviour
     private void ClearGhostPiece()
     {
         boards[activeBoard].ClearPiece(ghostPiece);
+    }
+
+    public void AddPieceToBag(PieceData piece)
+    {
+        bagFull.Add(piece);
+        ShufflePieces();
     }
 }
 
