@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     private static readonly float AUTOSHIFT_DELAY = 10.0f;
     private float autorepeatRate = 0.0f;
     private static readonly float AUTOREPEAT_RATE = 2.0f;
+    private int combo = -1;
 
     private InputAction actionShiftLeft;
     private InputAction actionShiftRight;
@@ -77,6 +78,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!paused)
+        {
+            RunGameLogic();
+        }
+    }
+
+    private void RunGameLogic()
+    {
         if (activePiece == null)
         {
             spawnDelay++;
@@ -94,7 +103,7 @@ public class GameManager : MonoBehaviour
 
             if (actionHold.WasPressedThisFrame())
             {
-                if(!holdUsed)
+                if (!holdUsed)
                 {
                     holdUsed = true;
                     Piece storedPiece = activePiece;
@@ -297,7 +306,23 @@ public class GameManager : MonoBehaviour
             return;
         }
         activePiece = null;
-        boards[activeBoard].CheckLineClear();
+        int pointsToAdd = boards[activeBoard].CheckLineClear();
+        if(pointsToAdd != 0)
+        {
+            points += pointsToAdd;
+            combo += 1;
+            print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
+            // update score on ui
+        }
+        else
+        {
+            if(combo > 0)
+            {
+                points += (combo * 5);
+                print("COMBO: " + (points - (combo * 5)) + " + " + (combo * 5) + " = " + points);
+            }
+            combo = -1;
+        }
         holdUsed = false;
     }
 

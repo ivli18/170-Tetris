@@ -79,6 +79,8 @@ public class PieceBlock
     public Vector2Int position;
     [SerializeField]
     public Block block;
+    [SerializeField]
+    public Color color = Color.white;
 }
 
 [System.Serializable]
