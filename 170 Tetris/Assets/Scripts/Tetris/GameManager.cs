@@ -1,7 +1,8 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using static UnityEngine.Audio.ProcessorInstance;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour
     private List<PieceData> bagCurrent = new List<PieceData>();
     private List<PieceData> previewPieces = new List<PieceData>();
     private Piece activePiece = null;
+    private Piece ghostPiece = null;
     private PieceData heldPiece = null;
     private bool holdUsed = false;
 
@@ -83,6 +85,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            ClearGhostPiece();
             boards[activeBoard].ClearPiece(activePiece);
 
             if (actionHold.WasPressedThisFrame())
@@ -214,19 +217,14 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            DrawGhostPiece();
             boards[activeBoard].DrawPiece(activePiece);
         }
     }
 
     private void SpawnPiece()
     {
-        lockDelayCurrent = 0.0f;
-        stallMoves = 0;
-        gravityApplied = 0.0f;
-
-        activePiece = new Piece();
-        activePiece.board = boards[activeBoard];
-        activePiece.pieceData = Instantiate(previewPieces[0]);
+        SpawnPiece(previewPieces[0]);
         previewPieces.RemoveAt(0);
 
         previewPieces.Add(bagCurrent[0]);
@@ -236,9 +234,6 @@ public class GameManager : MonoBehaviour
         {
             ShufflePieces();
         }
-
-        activePiece.position = new Vector2Int(4, boardHeight) - activePiece.pieceData.GetCenter();
-        boards[activeBoard].SpawnPiece(activePiece);
     }
 
     private void SpawnPiece(PieceData piece)
@@ -251,8 +246,18 @@ public class GameManager : MonoBehaviour
         activePiece.board = boards[activeBoard];
         activePiece.pieceData = piece;
 
+        ghostPiece = new Piece();
+        ghostPiece.board = boards[activeBoard];
+        ghostPiece.pieceData = Instantiate(piece);
+
         activePiece.position = new Vector2Int(4, boardHeight) - activePiece.pieceData.GetCenter();
+        ghostPiece.position = activePiece.position;
         boards[activeBoard].SpawnPiece(activePiece);
+
+        if (!activePiece.CheckForEmptySpace(Vector2Int.zero))
+        {
+            BoardLoss();
+        }
     }
 
     private void ShufflePieces()
@@ -271,6 +276,11 @@ public class GameManager : MonoBehaviour
     private void PlacePiece()
     {
         boards[activeBoard].DrawPiece(activePiece);
+        if (!activePiece.CheckWithinBoard())
+        {
+            BoardLoss();
+            return;
+        }
         activePiece = null;
         boards[activeBoard].CheckLineClear();
         holdUsed = false;
@@ -289,6 +299,33 @@ public class GameManager : MonoBehaviour
             lockDelayCurrent = 0.0f;
             stallMoves++;
         }
+    }
+
+    private void BoardLoss()
+    {
+        boards[activeBoard].blocks.ClearAllTiles();
+        SpawnPiece();
+    }
+
+    private void GameOver()
+    {
+        // called when all boards are lost
+    }
+
+    private void DrawGhostPiece()
+    {
+        if (activePiece != null)
+        {
+            ghostPiece.pieceData = activePiece.pieceData;
+            ghostPiece.position = activePiece.position;
+            while (ghostPiece.Move(Vector2Int.down)) { }
+            boards[activeBoard].DrawGhostPiece(ghostPiece);
+        }
+    }
+
+    private void ClearGhostPiece()
+    {
+        boards[activeBoard].ClearPiece(ghostPiece);
     }
 }
 
@@ -351,6 +388,19 @@ public class Piece
         foreach(PieceBlock block in pieceData.GetBlocks())
         {
             if(board.blocks.GetTile(new Vector3Int(position.x + block.position.x + offset.x, position.y + block.position.y + offset.y, 0)) != null || !board.PositionInBounds(position + block.position + offset))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public bool CheckWithinBoard()
+    {
+        foreach (PieceBlock block in pieceData.GetBlocks())
+        {
+            if (position.y + block.position.y >= board.boardHeight)
             {
                 return false;
             }

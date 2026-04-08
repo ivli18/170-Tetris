@@ -10,7 +10,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField]
     private Block tile;
 
-    private int boardHeight = 20; //base tetris is 20 for the visible height, and 40 is the true height; here it will be higher like 50-70
+    public int boardHeight = 20; //base tetris is 20 for the visible height, and 40 is the true height; here it will be higher like 50-70
     private int boardWidth = 10; // hesitant to say this should be changable
 
 
@@ -65,6 +65,17 @@ public class BoardManager : MonoBehaviour
         foreach(PieceBlock block in piece.pieceData.GetBlocks())
         {
             blocks.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.block);
+        }
+    }
+
+    public void DrawGhostPiece(Piece piece)
+    {
+        if (piece == null) { return; }
+
+        foreach (PieceBlock block in piece.pieceData.GetBlocks())
+        {
+            blocks.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.block);
+            blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), new Color(1.0f, 1.0f, 1.0f, 0.5f));
         }
     }
 
