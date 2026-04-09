@@ -16,12 +16,16 @@ MonoBehaviour:
   blocks:
   - position: {x: 0, y: 0}
     block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
+    color: {r: 0, g: 0.9019608, b: 0.99607843, a: 1}
   - position: {x: 1, y: 0}
     block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
+    color: {r: 0, g: 0.90196085, b: 0.9960785, a: 1}
   - position: {x: 2, y: 0}
     block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
+    color: {r: 0, g: 0.90196085, b: 0.9960785, a: 1}
   - position: {x: 3, y: 0}
     block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
+    color: {r: 0, g: 0.90196085, b: 0.9960785, a: 1}
   wallkickOffsets:
   - offsets:
     - {x: 0, y: 0}
