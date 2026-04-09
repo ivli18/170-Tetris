@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: TestBlock
   m_EditorClassIdentifier: Assembly-CSharp::Block
   score: 1
-  sprite: {fileID: 6218858931062380245, guid: d901a9149e1078644ab3a2ba84e64db4, type: 3}
+  sprite: {fileID: 4724796417245972588, guid: 13e4bd6d5f4f8fd47a0a0f3cbb06b351, type: 3}
