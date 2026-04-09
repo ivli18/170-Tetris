@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using static UnityEngine.Audio.ProcessorInstance;
+using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class GameManager : MonoBehaviour
     private InputAction actionHold;
     private InputAction actionsSwitchBoardLeft;
     private InputAction actionsSwitchBoardRight;
+    public Tilemap UI;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -62,6 +65,8 @@ public class GameManager : MonoBehaviour
         actionRotateClockwise = InputSystem.actions.FindAction("RotateClockwise");
         actionRotateCounterclockwise = InputSystem.actions.FindAction("RotateCounterclockwise");
         actionHold = InputSystem.actions.FindAction("Hold");
+
+        //UI = transform.Find("UITilemap").GetComponent<Tilemap>();
 
         ShufflePieces();
         for(int i = 0; i < previewPieceCount; i++)
@@ -109,6 +114,7 @@ public class GameManager : MonoBehaviour
                     Piece storedPiece = activePiece;
                     if (heldPiece != null)
                     {
+                        ClearHeldPiece(heldPiece);
                         SpawnPiece(heldPiece);
                     }
                     else
@@ -117,6 +123,7 @@ public class GameManager : MonoBehaviour
                     }
                     storedPiece.ResetPieceData();
                     heldPiece = storedPiece.pieceData;
+                    DrawHeldPiece(heldPiece); //added ui piece
                     return;
                 }
             }
@@ -372,6 +379,28 @@ public class GameManager : MonoBehaviour
     {
         bagFull.Add(piece);
         ShufflePieces();
+    }
+
+    public void DrawHeldPiece(PieceData piece)
+    {
+        if (piece == null) { return; }
+
+        foreach (PieceBlock block in piece.GetBlocks())
+        {
+            UI.SetTile(new Vector3Int(block.position.x, block.position.y, 0), block.block);
+            UI.SetColor(new Vector3Int(block.position.x, block.position.y, 0), new Color(block.color.r, block.color.g, block.color.b, 0.5f));
+        }
+    }
+
+    public void ClearHeldPiece(PieceData piece)
+    {
+        if (piece == null) { return; }
+
+        foreach (PieceBlock block in piece.GetBlocks())
+        {
+            UI.SetTile(new Vector3Int(block.position.x, block.position.y, 0), null);
+            UI.SetColor(new Vector3Int(block.position.x, block.position.y, 0), new Color(block.color.r, block.color.g, block.color.b, 0.5f));
+        }
     }
 }
 
