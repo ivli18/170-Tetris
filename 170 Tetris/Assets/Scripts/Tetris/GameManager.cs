@@ -467,13 +467,18 @@ public class GameManager : MonoBehaviour
     {
         level += 1;
         //open shop
+        shopOpen = true;
+        Pause();
         shopAnim.Play("shopOpen");
     }
 
     private void Pause()
     {
         paused = true;
-        PauseSprite.enabled = true;
+        if(!shopOpen)
+        {
+            PauseSprite.enabled = true;
+        }
     }
 
     private void Unpause()
