@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,9 +9,13 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    private bool shopOpen = false;
     private bool paused = false;
     private int level = 1;
     private int points = 0;
+    private int levelRequirement = 10;
+    private int lineClears = 0;
+    private static int[] LINE_CLEAR_POINTS = { 10, 30, 50, 80, 160 };
 
     [SerializeField]
     private List<BoardManager> boards;
@@ -51,7 +56,8 @@ public class GameManager : MonoBehaviour
     private InputAction actionHold;
     private InputAction actionsSwitchBoardLeft;
     private InputAction actionsSwitchBoardRight;
-    
+    private InputAction actionsPause;
+
     public Tilemap heldPieceUI;
     public TextMeshProUGUI currencyTextValue;
     public Tilemap previewPieceUI;
@@ -69,6 +75,7 @@ public class GameManager : MonoBehaviour
         actionRotateClockwise = InputSystem.actions.FindAction("RotateClockwise");
         actionRotateCounterclockwise = InputSystem.actions.FindAction("RotateCounterclockwise");
         actionHold = InputSystem.actions.FindAction("Hold");
+        actionsPause = InputSystem.actions.FindAction("Pause");
 
         currencyTextValue.SetText(points.ToString());
 
@@ -88,9 +95,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!paused)
+        if(!paused && !shopOpen)
         {
             RunGameLogic();
+        }
+        else if(paused)
+        {
+            if(actionsPause.WasPressedThisFrame()) {
+                Unpause();
+            }
         }
     }
 
@@ -139,6 +152,10 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
+            if (actionsPause.WasPressedThisFrame())
+            {
+                Pause();
+            }
             InputLR();
             InputRotate();
 
@@ -307,7 +324,7 @@ public class GameManager : MonoBehaviour
 
         foreach (PieceData piece in bagFull)
         {
-            bagCurrent.Insert(Random.Range(0, bagCurrent.Count + 1), piece);
+            bagCurrent.Insert(UnityEngine.Random.Range(0, bagCurrent.Count + 1), piece);
         }
     }
 
@@ -320,13 +337,20 @@ public class GameManager : MonoBehaviour
             return;
         }
         activePiece = null;
-        int pointsToAdd = boards[activeBoard].CheckLineClear();
-        if(pointsToAdd != 0)
+        int linesCleared = boards[activeBoard].CheckLineClear();
+        if (linesCleared != 0)
         {
+            int pointsToAdd = LINE_CLEAR_POINTS[Math.Min(linesCleared - 1, LINE_CLEAR_POINTS.Length - 1)];
             points += pointsToAdd;
             combo += 1;
+            lineClears += linesCleared;
             print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
             currencyTextValue.SetText(points.ToString());
+            // play line clear sfx
+            if (lineClears >= levelRequirement)
+            {
+                LevelClear();
+            }
         }
         else
         {
@@ -425,6 +449,23 @@ public class GameManager : MonoBehaviour
     public void ClearPreviewPieces()
     {
         previewPieceUI.ClearAllTiles();
+    }
+
+    private void LevelClear()
+    {
+        level += 1;
+        //Pause();
+        //OpenShop
+    }
+
+    private void Pause()
+    {
+        paused = true;
+    }
+
+    private void Unpause()
+    {
+        paused = false;
     }
 }
 
