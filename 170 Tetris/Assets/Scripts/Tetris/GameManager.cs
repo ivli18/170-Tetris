@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private List<BoardManager> boards;
     private int activeBoard = 0;
     [SerializeField]
-    private List<PieceData> bagFull;
+    public List<PieceData> bagFull;
     private List<PieceData> bagCurrent = new List<PieceData>();
     private List<PieceData> previewPieces = new List<PieceData>();
     private Piece activePiece = null;
