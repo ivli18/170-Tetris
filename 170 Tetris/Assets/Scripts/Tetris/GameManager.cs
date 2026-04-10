@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using static UnityEngine.Audio.ProcessorInstance;
 using UnityEngine.Tilemaps;
 using TMPro;
+using System.Reflection;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class GameManager : MonoBehaviour
     private bool paused = false;
     private int level = 1;
     private int points = 0;
-    private int levelRequirement = 10;
+    private int levelRequirement = 1;
     private int lineClears = 0;
     private static int[] LINE_CLEAR_POINTS = { 10, 30, 50, 80, 160 };
 
@@ -64,6 +65,8 @@ public class GameManager : MonoBehaviour
     
     public GameObject PauseScreen;
     private SpriteRenderer PauseSprite;
+    public GameObject ShopUI;
+    private Animator shopAnim;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -95,6 +98,7 @@ public class GameManager : MonoBehaviour
         DrawPreviewPieces();
 
         PauseSprite = PauseScreen.GetComponent<SpriteRenderer>();
+        shopAnim = ShopUI.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -459,8 +463,8 @@ public class GameManager : MonoBehaviour
     private void LevelClear()
     {
         level += 1;
-        //Pause();
-        //OpenShop
+        //open shop
+        shopAnim.Play("shopOpen");
     }
 
     private void Pause()
