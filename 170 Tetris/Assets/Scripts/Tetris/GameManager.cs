@@ -62,6 +62,9 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI currencyTextValue;
     public Tilemap previewPieceUI;
     
+    public GameObject PauseScreen;
+    private SpriteRenderer PauseSprite;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -90,6 +93,8 @@ public class GameManager : MonoBehaviour
             }
         }
         DrawPreviewPieces();
+
+        PauseSprite = PauseScreen.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -461,11 +466,13 @@ public class GameManager : MonoBehaviour
     private void Pause()
     {
         paused = true;
+        PauseSprite.enabled = true;
     }
 
     private void Unpause()
     {
         paused = false;
+        PauseSprite.enabled = false;
     }
 }
 
