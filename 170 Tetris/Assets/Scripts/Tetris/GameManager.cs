@@ -61,8 +61,6 @@ public class GameManager : MonoBehaviour
     public Tilemap heldPieceUI;
     public TextMeshProUGUI currencyTextValue;
     public Tilemap previewPieceUI;
-    public Canvas pauseUI = null;
-    public AudioManager sfxManager = null;
     
     public GameObject PauseScreen;
     private SpriteRenderer PauseSprite;
@@ -353,10 +351,7 @@ public class GameManager : MonoBehaviour
             lineClears += linesCleared;
             print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
             currencyTextValue.SetText(points.ToString());
-            if (sfxManager != null)
-            {
-                sfxManager.PlaySoundClear();
-            }
+            // play line clear sfx
             if (lineClears >= levelRequirement)
             {
                 LevelClear();
@@ -364,11 +359,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (sfxManager != null)
-            {
-                sfxManager.PlaySoundPlace();
-            }
-            if (combo > 0)
+            if(combo > 0)
             {
                 points += (combo * 5);
                 print("COMBO: " + (points - (combo * 5)) + " + " + (combo * 5) + " = " + points);
@@ -475,27 +466,23 @@ public class GameManager : MonoBehaviour
     private void Pause()
     {
         paused = true;
-<<<<<<< Updated upstream
+
         if (pauseUI != null)
         {
             pauseUI.enabled = true;
         }
-=======
         PauseSprite.enabled = true;
->>>>>>> Stashed changes
     }
 
     private void Unpause()
     {
         paused = false;
-<<<<<<< Updated upstream
+        
         if (pauseUI != null)
         {
             pauseUI.enabled = false;
         }
-=======
         PauseSprite.enabled = false;
->>>>>>> Stashed changes
     }
 }
 
