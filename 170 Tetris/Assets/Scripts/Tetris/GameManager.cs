@@ -68,6 +68,8 @@ public class GameManager : MonoBehaviour
     public GameObject ShopUI;
     private Animator shopAnim;
     
+    public AudioManager audioManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -355,7 +357,7 @@ public class GameManager : MonoBehaviour
             lineClears += linesCleared;
             print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
             currencyTextValue.SetText(points.ToString());
-            // play line clear sfx
+            audioManager.PlaySoundClear();
             if (lineClears >= levelRequirement)
             {
                 LevelClear();
@@ -372,6 +374,7 @@ public class GameManager : MonoBehaviour
             combo = -1;
         }
         holdUsed = false;
+        audioManager.PlaySoundPlace();
     }
 
     private void HardDrop()
