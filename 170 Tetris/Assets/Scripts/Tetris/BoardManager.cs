@@ -7,7 +7,6 @@ using UnityEngine.Tilemaps;
 public class BoardManager : MonoBehaviour
 {
     private Grid grid;
-    private Tilemap UI;
     private Tilemap background;
     public Tilemap blocks;
     [SerializeField]
@@ -25,7 +24,6 @@ public class BoardManager : MonoBehaviour
         grid = GetComponent<Grid>();
         background = transform.Find("Background").GetComponent<Tilemap>();
         blocks = transform.Find("Blocks").GetComponent<Tilemap>();
-        UI = transform.Find("UITilemap").GetComponent<Tilemap>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -84,17 +82,6 @@ public class BoardManager : MonoBehaviour
         {
             blocks.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.block);
             blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), new Color(block.color.r, block.color.g, block.color.b, 0.5f));
-        }
-    }
-
-    public void DrawHeldPiece(Piece piece)
-    {
-        if (piece == null) { return; }
-
-        foreach (PieceBlock block in piece.pieceData.GetBlocks())
-        {
-            UI.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.block);
-            UI.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), new Color(block.color.r, block.color.g, block.color.b, 0.5f));
         }
     }
 

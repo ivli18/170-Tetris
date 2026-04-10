@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using static UnityEngine.Audio.ProcessorInstance;
 using UnityEngine.Tilemaps;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -50,7 +51,10 @@ public class GameManager : MonoBehaviour
     private InputAction actionHold;
     private InputAction actionsSwitchBoardLeft;
     private InputAction actionsSwitchBoardRight;
-    public Tilemap UI;
+    
+    public Tilemap heldPieceUI;
+    public TextMeshProUGUI currencyTextValue;
+    public Tilemap previewPieceUI;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -66,7 +70,7 @@ public class GameManager : MonoBehaviour
         actionRotateCounterclockwise = InputSystem.actions.FindAction("RotateCounterclockwise");
         actionHold = InputSystem.actions.FindAction("Hold");
 
-        //UI = transform.Find("UITilemap").GetComponent<Tilemap>();
+        currencyTextValue.SetText(points.ToString());
 
         ShufflePieces();
         for(int i = 0; i < previewPieceCount; i++)
@@ -78,6 +82,7 @@ public class GameManager : MonoBehaviour
                 ShufflePieces();
             }
         }
+        DrawPreviewPieces();
     }
 
     // Update is called once per frame
@@ -255,11 +260,13 @@ public class GameManager : MonoBehaviour
 
     private void SpawnPiece()
     {
+        ClearPreviewPieces();
         SpawnPiece(previewPieces[0]);
         previewPieces.RemoveAt(0);
 
         previewPieces.Add(bagCurrent[0]);
         bagCurrent.RemoveAt(0);
+        DrawPreviewPieces();
 
         if (bagCurrent.Count == 0)
         {
@@ -319,7 +326,7 @@ public class GameManager : MonoBehaviour
             points += pointsToAdd;
             combo += 1;
             print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
-            // update score on ui
+            currencyTextValue.SetText(points.ToString());
         }
         else
         {
@@ -327,6 +334,7 @@ public class GameManager : MonoBehaviour
             {
                 points += (combo * 5);
                 print("COMBO: " + (points - (combo * 5)) + " + " + (combo * 5) + " = " + points);
+                currencyTextValue.SetText(points.ToString());
             }
             combo = -1;
         }
@@ -387,8 +395,8 @@ public class GameManager : MonoBehaviour
 
         foreach (PieceBlock block in piece.GetBlocks())
         {
-            UI.SetTile(new Vector3Int(block.position.x, block.position.y, 0), block.block);
-            UI.SetColor(new Vector3Int(block.position.x, block.position.y, 0), new Color(block.color.r, block.color.g, block.color.b, 0.5f));
+            heldPieceUI.SetTile(new Vector3Int(block.position.x - piece.GetCenter().x, block.position.y - piece.GetCenter().y, 0), block.block);
+            heldPieceUI.SetColor(new Vector3Int(block.position.x - piece.GetCenter().x, block.position.y - piece.GetCenter().y, 0), block.color);
         }
     }
 
@@ -398,9 +406,25 @@ public class GameManager : MonoBehaviour
 
         foreach (PieceBlock block in piece.GetBlocks())
         {
-            UI.SetTile(new Vector3Int(block.position.x, block.position.y, 0), null);
-            UI.SetColor(new Vector3Int(block.position.x, block.position.y, 0), new Color(block.color.r, block.color.g, block.color.b, 0.5f));
+            heldPieceUI.SetTile(new Vector3Int(block.position.x - piece.GetCenter().x, block.position.y - piece.GetCenter().y, 0), null);
         }
+    }
+
+    public void DrawPreviewPieces()
+    {
+        for(int i = 0; i < previewPieceCount; i++)
+        {
+            foreach (PieceBlock block in previewPieces[i].GetBlocks())
+            {
+                previewPieceUI.SetTile(new Vector3Int(block.position.x - previewPieces[i].GetCenter().x, block.position.y - previewPieces[i].GetCenter().y + (12 - i * 4), 0), block.block);
+                previewPieceUI.SetColor(new Vector3Int(block.position.x - previewPieces[i].GetCenter().x, block.position.y - previewPieces[i].GetCenter().y + (12 - i * 4), 0), block.color);
+            }
+        }
+    }
+
+    public void ClearPreviewPieces()
+    {
+        previewPieceUI.ClearAllTiles();
     }
 }
 
