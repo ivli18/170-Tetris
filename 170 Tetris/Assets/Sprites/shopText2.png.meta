@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: c9d6ef633576173468b0db5c3be9fbd7
+guid: d9cfdea2b5cd0cf4395ff0d635bc9704
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4652928969595118282
-    second: shopText2_0
+      213: -7693819049078112663
+    second: shopText2 1_0
+  - first:
+      213: -9134955842909815565
+    second: shopText2 1_1
+  - first:
+      213: -4189543822074839668
+    second: shopText2 1_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -96,30 +102,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: shopText2_0
+      name: shopText2 1_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 222
-        height: 66
+        y: 24
+        width: 49
+        height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +121,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ac267ddde36829040800000000000000
-      internalID: 4652928969595118282
+      spriteID: 96eb095a6501a3590800000000000000
+      internalID: -7693819049078112663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shopText2 1_1
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 23
+        width: 125
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fc3b785f0e1a3180800000000000000
+      internalID: -9134955842909815565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shopText2 1_2
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 23
+        width: 52
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8dfb4a4710cbd5c0800000000000000
+      internalID: -4189543822074839668
       vertices: []
       indices: 
       edges: []
@@ -138,7 +175,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      shopText2_0: 4652928969595118282
+      shopText2 1_0: -7693819049078112663
+      shopText2 1_1: -9134955842909815565
+      shopText2 1_2: -4189543822074839668
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
