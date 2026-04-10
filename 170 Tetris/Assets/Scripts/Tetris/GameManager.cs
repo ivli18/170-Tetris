@@ -64,6 +64,9 @@ public class GameManager : MonoBehaviour
     public Canvas pauseUI = null;
     public AudioManager sfxManager = null;
     
+    public GameObject PauseScreen;
+    private SpriteRenderer PauseSprite;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -92,6 +95,8 @@ public class GameManager : MonoBehaviour
             }
         }
         DrawPreviewPieces();
+
+        PauseSprite = PauseScreen.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -470,19 +475,27 @@ public class GameManager : MonoBehaviour
     private void Pause()
     {
         paused = true;
+<<<<<<< Updated upstream
         if (pauseUI != null)
         {
             pauseUI.enabled = true;
         }
+=======
+        PauseSprite.enabled = true;
+>>>>>>> Stashed changes
     }
 
     private void Unpause()
     {
         paused = false;
+<<<<<<< Updated upstream
         if (pauseUI != null)
         {
             pauseUI.enabled = false;
         }
+=======
+        PauseSprite.enabled = false;
+>>>>>>> Stashed changes
     }
 }
 
