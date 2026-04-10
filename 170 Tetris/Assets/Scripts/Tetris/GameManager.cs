@@ -466,22 +466,12 @@ public class GameManager : MonoBehaviour
     private void Pause()
     {
         paused = true;
-
-        if (pauseUI != null)
-        {
-            pauseUI.enabled = true;
-        }
         PauseSprite.enabled = true;
     }
 
     private void Unpause()
     {
         paused = false;
-        
-        if (pauseUI != null)
-        {
-            pauseUI.enabled = false;
-        }
         PauseSprite.enabled = false;
     }
 }
