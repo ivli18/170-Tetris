@@ -99,7 +99,8 @@ public class BoardManager : MonoBehaviour
 
         if (rowsToClear.Count != 0)
         {
-            score = LINE_CLEAR_POINTS[Math.Min(rowsToClear.Count - 1, LINE_CLEAR_POINTS.Length - 1)];
+            //score = LINE_CLEAR_POINTS[Math.Min(rowsToClear.Count - 1, LINE_CLEAR_POINTS.Length - 1)];
+            score = rowsToClear.Count;
             //int scoreMultiplier = LINE_CLEAR_MULTIS[Math.Min(rowsToClear.Count - 1, LINE_CLEAR_MULTIS.Length - 1)]; -- MULTCLEAR
             while (rowsToClear.Count != 0)
             {
