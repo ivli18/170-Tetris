@@ -559,6 +559,17 @@
                 },
                 {
                     "name": "",
+                    "id": "ef6edc9e-4b7e-4b55-89fb-43d01fc186b2",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateClockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e079baa6-1ee5-4709-893c-0fc33c6bb3b8",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
@@ -637,7 +648,7 @@
                 {
                     "name": "",
                     "id": "0920d3fa-e5c6-4ab3-b81c-3bdac91f04b9",
-                    "path": "<Keyboard>/upArrow",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
