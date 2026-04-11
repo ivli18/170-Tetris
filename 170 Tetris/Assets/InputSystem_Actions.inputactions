@@ -552,7 +552,7 @@
                     "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Keyboard&Mouse;Tetris WASD",
                     "action": "RotateClockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -570,11 +570,33 @@
                 },
                 {
                     "name": "",
+                    "id": "ee8aaeaa-1990-4a2d-bcfe-df8a26979b58",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris WASD",
+                    "action": "RotateClockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f23bd9e0-99fc-4511-a35e-10464510b270",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris Arrows",
+                    "action": "RotateClockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "a17428f3-7456-49a1-928c-299483ce12c2",
                     "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Keyboard&Mouse;Tetris Arrows",
                     "action": "RotateCounterclockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -592,11 +614,33 @@
                 },
                 {
                     "name": "",
+                    "id": "3af4366f-875e-4da3-8185-d537a78d2593",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris WASD",
+                    "action": "RotateCounterclockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0cd77f5-9a40-4ba0-9ecc-d9a64c496015",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris Arrows",
+                    "action": "RotateCounterclockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "66aa6ab8-879d-499c-9a2a-b948535580d5",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Tetris Arrows;Keyboard&Mouse",
                     "action": "ShiftLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -614,11 +658,22 @@
                 },
                 {
                     "name": "",
+                    "id": "bc331ee5-ca07-4d98-91a6-f415da767077",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris WASD",
+                    "action": "ShiftLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "755fd9a5-5625-4491-bd94-3506a5764913",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Tetris Arrows;Keyboard&Mouse",
                     "action": "ShiftRight",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -630,6 +685,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
+                    "action": "ShiftRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "edb82035-bfd8-4fb1-8910-ce96c717f2ba",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris WASD",
                     "action": "ShiftRight",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -658,11 +724,33 @@
                 },
                 {
                     "name": "",
+                    "id": "8e7e6bc3-a5da-49d9-ba42-30c3d16c1abf",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris Arrows",
+                    "action": "HardDrop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "32b0992b-b5ad-4c2b-85d7-81c06e4a5a61",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris WASD",
+                    "action": "HardDrop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2a3697ae-bc18-4795-8fb2-76bcc5547a8a",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Tetris Arrows;Keyboard&Mouse",
                     "action": "SoftDrop",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -680,11 +768,22 @@
                 },
                 {
                     "name": "",
+                    "id": "e90cac4d-ea09-4689-8d55-10798e9bdef4",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Tetris WASD",
+                    "action": "SoftDrop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "b89df082-9b24-43f3-934d-7b3c2612d3a9",
                     "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Keyboard&Mouse;Tetris Arrows;Tetris WASD",
                     "action": "Hold",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -695,7 +794,7 @@
                     "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Keyboard&Mouse;Tetris WASD;Tetris Arrows",
                     "action": "Hold",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1334,6 +1433,16 @@
                     "isOR": false
                 }
             ]
+        },
+        {
+            "name": "Tetris WASD",
+            "bindingGroup": "Tetris WASD",
+            "devices": []
+        },
+        {
+            "name": "Tetris Arrows",
+            "bindingGroup": "Tetris Arrows",
+            "devices": []
         }
     ]
 }

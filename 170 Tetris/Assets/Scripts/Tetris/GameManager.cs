@@ -83,6 +83,9 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
+        // Default is the existing input system, yet to add toggles
+        // InputSystem.actions.bindingMask = InputBinding.MaskByGroup("Tetris WASD");
+        // InputSystem.actions.bindingMask = InputBinding.MaskByGroup("Tetris Arrows");
         actionShiftLeft = InputSystem.actions.FindAction("ShiftLeft");
         actionShiftRight = InputSystem.actions.FindAction("ShiftRight");
         actionHardDrop = InputSystem.actions.FindAction("HardDrop");
