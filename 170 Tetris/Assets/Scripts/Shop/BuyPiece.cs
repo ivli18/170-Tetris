@@ -15,11 +15,7 @@ public class BuyPiece : MonoBehaviour
     void Start()
     {
         //chooses a random piece
-        //todo: add gacha weights, choose a new piece each shop visit, choose a new piece if selected piece in bagfull
-        pieceList = gameManager.bagFull;
-        int index = Random.Range(0, pieceList.Count);
-        PieceData piece = pieceList[index];
-        print(pieceList.Count);
+        PieceData piece = gameManager.RollGatcha();
     }
 
     // Update is called once per frame

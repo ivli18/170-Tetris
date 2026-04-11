@@ -5,6 +5,8 @@ using UnityEngine.Tilemaps;
 using UnityEditor;
 #endif
 
+public enum Rarity { D, C, B, A, S, SS};
+
 [CreateAssetMenu(fileName = "PieceData", menuName = "Scriptable Objects/PieceData")]
 public class PieceData : ScriptableObject
 {
@@ -23,6 +25,10 @@ public class PieceData : ScriptableObject
 
     [SerializeField]
     private PieceBlock[] blocks;
+
+
+    [SerializeField]
+    private Rarity rarity;
 
     /*private static readonly Vector2Int[] baseOffsets1 = {new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(0, 0)};
     private static readonly Vector2Int[] baseOffsets2 = { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(1, -1), new Vector2Int(0, 2), new Vector2Int(1, 2) };
@@ -52,12 +58,18 @@ public class PieceData : ScriptableObject
         return center;
     }
 
+    public Rarity GetRarity()
+    {
+        return rarity;
+    }
+
     public WallkickOffests[] GetWallkickOffests()
     {
         return wallkickOffsets;
     }
 
     #region Editor Menu
+    #if UNITY_EDITOR
 
     [MenuItem("Assets/Create/Piece")]
     public static void CreatePiece()
@@ -69,6 +81,7 @@ public class PieceData : ScriptableObject
         }
         AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<PieceData>(), path);
     }
+    #endif
     #endregion
 }
 

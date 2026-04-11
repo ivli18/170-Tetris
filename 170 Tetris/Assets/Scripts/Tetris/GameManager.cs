@@ -19,10 +19,17 @@ public class GameManager : MonoBehaviour
     private static int[] LINE_CLEAR_POINTS = { 10, 30, 50, 80, 160 };
 
     [SerializeField]
+    public List<PieceData> allPieces;
+    private List<PieceData>[] piecePullTables = {new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>() };
+    [SerializeField]
+    public int[] baseWeightTable = { 100, 80, 60, 40, 20, 10 };
+    public int[] rareWeightTable = { 0, 0, 100, 60, 40, 20 };
+
+    [SerializeField]
     private List<BoardManager> boards;
     private int activeBoard = 0;
     [SerializeField]
-    public List<PieceData> bagFull;
+    private List<PieceData> bagFull;
     private List<PieceData> bagCurrent = new List<PieceData>();
     private List<PieceData> previewPieces = new List<PieceData>();
     private Piece activePiece = null;
@@ -87,17 +94,11 @@ public class GameManager : MonoBehaviour
 
         currencyTextValue.SetText(points.ToString());
 
+        SetupPullTable();
+
         ShufflePieces();
-        for(int i = 0; i < previewPieceCount; i++)
-        {
-            previewPieces.Add(bagCurrent[0]);
-            bagCurrent.RemoveAt(0);
-            if(bagCurrent.Count <= 0)
-            {
-                ShufflePieces();
-            }
-        }
-        DrawPreviewPieces();
+        ShufflePreviewPieces();
+        CalculateGravity();
 
         PauseSprite = PauseScreen.GetComponent<SpriteRenderer>();
         shopAnim = ShopUI.GetComponent<Animator>();
@@ -114,6 +115,13 @@ public class GameManager : MonoBehaviour
         {
             if(actionsPause.WasPressedThisFrame()) {
                 Unpause();
+            }
+        }
+        else
+        {
+            if (actionsPause.WasPressedThisFrame())
+            {
+                CloseShop();
             }
         }
     }
@@ -189,7 +197,11 @@ public class GameManager : MonoBehaviour
                     activePiece.Move(Vector2Int.down);
                     gravityApplied -= 1.0f;
                     lockDelayCurrent = 0.0f;
-                    stallMoves = 0;
+                    if(activePiece.lowestRow > activePiece.position.y)
+                    {
+                        stallMoves = 0;
+                        activePiece.lowestRow = activePiece.position.y;
+                    }
                 }
             }
             else
@@ -318,7 +330,6 @@ public class GameManager : MonoBehaviour
 
         activePiece.position = new Vector2Int(4, boardHeight) - activePiece.pieceData.GetCenter();
         ghostPiece.position = activePiece.position;
-        boards[activeBoard].SpawnPiece(activePiece);
 
         if (!activePiece.CheckForEmptySpace(Vector2Int.zero))
         {
@@ -339,6 +350,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void ShufflePreviewPieces()
+    {
+        previewPieces.Clear();
+        for (int i = 0; i < previewPieceCount; i++)
+        {
+            previewPieces.Add(bagCurrent[0]);
+            bagCurrent.RemoveAt(0);
+            if (bagCurrent.Count <= 0)
+            {
+                ShufflePieces();
+            }
+        }
+        ClearPreviewPieces();
+        DrawPreviewPieces();
+    }
+
     private void PlacePiece()
     {
         boards[activeBoard].DrawPiece(activePiece);
@@ -355,11 +382,12 @@ public class GameManager : MonoBehaviour
             points += pointsToAdd;
             combo += 1;
             lineClears += linesCleared;
-            print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
+            //print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
             currencyTextValue.SetText(points.ToString());
             audioManager.PlaySoundClear();
             if (lineClears >= levelRequirement)
             {
+                lineClears = 0;
                 LevelClear();
             }
         }
@@ -368,7 +396,7 @@ public class GameManager : MonoBehaviour
             if(combo > 0)
             {
                 points += (combo * 5);
-                print("COMBO: " + (points - (combo * 5)) + " + " + (combo * 5) + " = " + points);
+                //print("COMBO: " + (points - (combo * 5)) + " + " + (combo * 5) + " = " + points);
                 currencyTextValue.SetText(points.ToString());
             }
             combo = -1;
@@ -422,7 +450,16 @@ public class GameManager : MonoBehaviour
     public void AddPieceToBag(PieceData piece)
     {
         bagFull.Add(piece);
+        piecePullTables[(int) piece.GetRarity()].Remove(piece);
         ShufflePieces();
+        ShufflePreviewPieces();
+    }
+
+    public void RemovePieceFromBag(PieceData piece)
+    {
+        piecePullTables[(int) piece.GetRarity()].Add(piece);
+        ShufflePieces();
+        ShufflePreviewPieces();
     }
 
     public void DrawHeldPiece(PieceData piece)
@@ -466,10 +503,20 @@ public class GameManager : MonoBehaviour
     private void LevelClear()
     {
         level += 1;
-        //open shop
+        CalculateGravity();
+        OpenShop();
+    }
+
+    private void OpenShop()
+    {
         shopOpen = true;
-        Pause();
         shopAnim.Play("shopOpen");
+    }
+
+    public void CloseShop()
+    {
+        shopOpen = false;
+        shopAnim.Play("shopClose");
     }
 
     private void Pause()
@@ -486,6 +533,70 @@ public class GameManager : MonoBehaviour
         paused = false;
         PauseSprite.enabled = false;
     }
+
+    private void CalculateGravity()
+    {
+        gravity = Math.Min((1.0f / (float) Math.Pow(0.8f - ((level - 1) * 0.007f), level - 1)) / 60.0f, (float) boardHeight);
+    }
+
+    public void SetupPullTable()
+    {
+        foreach(PieceData piece in allPieces)
+        {
+            if (!bagFull.Contains(piece))
+            {
+                piecePullTables[(int)piece.GetRarity()].Add(piece);
+            }
+        }
+    }
+
+
+    public PieceData RollGatcha(int[] weightTable, bool repeats)
+    {
+        PieceData piece = null;
+        while (piece == null)
+        {
+            // Choose a table to pull from based on the weightTable weights
+            int weightSum = 0;
+            for (int i = 0; i < weightTable.Length; i++)
+            {
+                if (piecePullTables[i].Count != 0)
+                {
+                    weightSum += weightTable[i];
+                }
+            }
+
+            if(weightSum == 0)
+            {
+                // add fallback for no tables having a valid roll
+            
+            }
+            int rnd = UnityEngine.Random.Range(0, weightSum);
+            int tableToPull = 0;
+            for (int i = 0; i < weightTable.Length; i++)
+            {
+                if (piecePullTables[i].Count != 0)
+                {
+                    if (rnd < weightTable[i])
+                    {
+                        tableToPull = i;
+                        break;
+                    }
+                    rnd -= weightTable[i];
+                }
+            }
+
+            int randPiece = UnityEngine.Random.Range(0, piecePullTables[tableToPull].Count);
+            piece = piecePullTables[tableToPull][randPiece];
+        }
+
+        return piece;
+    }
+
+    public PieceData RollGatcha()
+    {
+        return RollGatcha(baseWeightTable, false);
+    }
 }
 
 public class Piece
@@ -494,11 +605,7 @@ public class Piece
     public Vector2Int position = new Vector2Int(0, 0);
     public PieceData pieceData;
     public BoardManager board;
-
-    public void Step()
-    {
-
-    }
+    public int lowestRow = 100;
 
     public bool Rotate(int dir)
     {

@@ -38,6 +38,7 @@ public class Block : TileBase
     }
 
     #region Editor Menu
+    #if UNITY_EDITOR
 
     [MenuItem("Assets/Create/Block")]
     public static void CreateBlock()
@@ -49,5 +50,6 @@ public class Block : TileBase
         }
         AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<Block>(), path);
     }
+    #endif
     #endregion
 }

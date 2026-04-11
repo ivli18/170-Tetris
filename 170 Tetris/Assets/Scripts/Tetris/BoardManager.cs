@@ -26,31 +26,9 @@ public class BoardManager : MonoBehaviour
         blocks = transform.Find("Blocks").GetComponent<Tilemap>();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void SetupBoard()
     {
         // set up the grid size
-    }
-
-    private void ClearBoard()
-    {
-
-    }
-
-    public void SpawnPiece(Piece piece)
-    {
-
     }
 
     public void ClearPiece(Piece piece)
@@ -150,16 +128,6 @@ public class BoardManager : MonoBehaviour
             }
         }
         return score;
-    }
-
-    private void ClearTile(Vector2Int tile)
-    {
-
-    }
-
-    private void ScoreTile(Vector2Int tile)
-    {
-        
     }
 
     public bool PositionInBounds(Vector2Int position)
