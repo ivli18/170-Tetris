@@ -35,8 +35,9 @@ public class GameManager : MonoBehaviour
     private List<PieceData> previewPieces = new List<PieceData>();
     private Piece activePiece = null;
     private Piece ghostPiece = null;
-    private PieceData heldPiece = null;
-    private bool holdUsed = false;
+    private List<PieceData> heldPieces = new List<PieceData>();
+    private int holdUsed = 0;
+    public int holdCount = 1;
 
     private int boardHeight = 20; //base tetris is 20 for the visible height, and 40 is the true height; here it will be higher like 50-70
     private int boardWidth = 10; // hesitant to say this should be changable
@@ -169,22 +170,23 @@ public class GameManager : MonoBehaviour
 
             if (actionHold.WasPressedThisFrame())
             {
-                if (!holdUsed)
+                if (holdUsed < holdCount)
                 {
-                    holdUsed = true;
+                    holdUsed += 1;
                     Piece storedPiece = activePiece;
-                    if (heldPiece != null)
+                    if (heldPieces.Count == holdCount)
                     {
-                        ClearHeldPiece(heldPiece);
-                        SpawnPiece(heldPiece);
+                        ClearHeldPiece();
+                        SpawnPiece(heldPieces[0]);
+                        heldPieces.RemoveAt(0);
                     }
                     else
                     {
                         SpawnPiece();
                     }
                     storedPiece.ResetPieceData();
-                    heldPiece = storedPiece.pieceData;
-                    DrawHeldPiece(heldPiece); //added ui piece
+                    heldPieces.Add(storedPiece.pieceData);
+                    DrawHeldPiece(); //added ui piece
                     return;
                 }
             }
@@ -451,7 +453,7 @@ public class GameManager : MonoBehaviour
             }
             combo = -1;
         }
-        holdUsed = false;
+        holdUsed = 0;
         audioManager.PlaySoundPlace();
     }
 
@@ -512,25 +514,21 @@ public class GameManager : MonoBehaviour
         ShufflePreviewPieces();
     }
 
-    public void DrawHeldPiece(PieceData piece)
+    public void DrawHeldPiece()
     {
-        if (piece == null) { return; }
-
-        foreach (PieceBlock block in piece.GetBlocks())
+        for (int i = 0; i < heldPieces.Count; i++)
         {
-            heldPieceUI.SetTile(new Vector3Int(block.position.x - piece.GetCenter().x, block.position.y - piece.GetCenter().y, 0), block.block);
-            heldPieceUI.SetColor(new Vector3Int(block.position.x - piece.GetCenter().x, block.position.y - piece.GetCenter().y, 0), block.color);
+            foreach (PieceBlock block in heldPieces[i].GetBlocks())
+            {
+                heldPieceUI.SetTile(new Vector3Int(block.position.x - heldPieces[i].GetCenter().x, block.position.y - heldPieces[i].GetCenter().y + (-i * 4), 0), block.block);
+                heldPieceUI.SetColor(new Vector3Int(block.position.x - heldPieces[i].GetCenter().x, block.position.y - heldPieces[i].GetCenter().y + (-i * 4), 0), block.color);
+            }
         }
     }
 
-    public void ClearHeldPiece(PieceData piece)
+    public void ClearHeldPiece()
     {
-        if (piece == null) { return; }
-
-        foreach (PieceBlock block in piece.GetBlocks())
-        {
-            heldPieceUI.SetTile(new Vector3Int(block.position.x - piece.GetCenter().x, block.position.y - piece.GetCenter().y, 0), null);
-        }
+        heldPieceUI.ClearAllTiles();
     }
 
     public void DrawPreviewPieces()
@@ -678,6 +676,11 @@ public class GameManager : MonoBehaviour
         previewPieceUI.GetComponent<Transform>().position = new Vector3(7.5f + offset_math, -4, 0);
     }
 
+    public void AddHoldSlot()
+    {
+        holdCount += 1;
+    }
+
     // Increase/Reduce board size (reducing size currently does not remove out of bounds blocks)
     public void AddBoardSize(int x, int y)
     {
@@ -751,6 +754,10 @@ public class GameManager : MonoBehaviour
         if (actionSwitchBoard3.WasPressedThisFrame())
         {
             AddBoardSize(0, 1);
+        }
+        if (actionSwitchBoard4.WasPressedThisFrame())
+        {
+            AddHoldSlot();
         }
     }
 }
