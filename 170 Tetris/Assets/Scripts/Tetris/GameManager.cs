@@ -77,6 +77,11 @@ public class GameManager : MonoBehaviour
     
     public AudioManager audioManager;
 
+    private void Awake()
+    {
+        SetupPullTable();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -96,8 +101,6 @@ public class GameManager : MonoBehaviour
         actionsPause = InputSystem.actions.FindAction("Pause");
 
         currencyTextValue.SetText(points.ToString());
-
-        SetupPullTable();
 
         ShufflePieces();
         ShufflePreviewPieces();
@@ -553,7 +556,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    // Current implementation means multiples of each piece could appear in the shop. There is a fairly easy fix if we want it.
     public PieceData RollGatcha(int[] weightTable, bool repeats)
     {
         PieceData piece = null;
