@@ -216,4 +216,10 @@ public class BoardManager : MonoBehaviour
     {
         inactiveOverlay.enabled = true;
     }
+
+    public void BoardLoss()
+    {
+        blocks.color = Color.black;
+        SetInactive();
+    }
 }

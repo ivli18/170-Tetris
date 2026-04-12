@@ -8,11 +8,14 @@ using UnityEngine.Tilemaps;
 using TMPro;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Unity.VectorGraphics;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     private bool shopOpen = false;
     private bool paused = false;
+    private bool gameOver = false;
     private int level = 1;
     private int points = 0;
     private int levelRequirement = 1;
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private List<BoardManager> boards;
+    private List<BoardManager> lostBoards = new List<BoardManager>();
     private int activeBoard = 0;
     [SerializeField]
     private List<PieceData> bagFull;
@@ -129,7 +133,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!paused && !shopOpen)
+        if(!paused && !shopOpen && !gameOver)
         {
             RunGameLogic();
         }
@@ -139,7 +143,7 @@ public class GameManager : MonoBehaviour
                 Unpause();
             }
         }
-        else
+        else if(shopOpen)
         {
             if (actionsPause.WasPressedThisFrame())
             {
@@ -253,20 +257,24 @@ public class GameManager : MonoBehaviour
         if(actionSwitchBoardLeft.WasPressedThisFrame())
         {
             int boardToSwitch = activeBoard - 1;
-            if(boardToSwitch < 0) { return; }//{ boardToSwitch = boards.Count - 1; }
-            if(activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
+            if(boardToSwitch < 0) { boardToSwitch = boards.Count - 1; }
+            while(!activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
             {
-                SetActiveBoard(boardToSwitch);
+                boardToSwitch -= 1;
+                if (boardToSwitch < 0) { boardToSwitch = boards.Count - 1; }
             }
+            SetActiveBoard(boardToSwitch);
         }
         else if (actionSwitchBoardRight.WasPressedThisFrame())
         {
             int boardToSwitch = activeBoard + 1;
-            if (boardToSwitch >= boards.Count) { return; }//{ boardToSwitch = 0; }
-            if (activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
+            if (boardToSwitch > boards.Count - 1) { boardToSwitch = 0; }
+            while (!activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
             {
-                SetActiveBoard(boardToSwitch);
+                boardToSwitch += 1;
+                if (boardToSwitch > boards.Count - 1) { boardToSwitch = 0; }
             }
+            SetActiveBoard(boardToSwitch);
         }
     }
 
@@ -379,7 +387,7 @@ public class GameManager : MonoBehaviour
         ghostPiece.board = boards[activeBoard];
         ghostPiece.pieceData = Instantiate(piece);
 
-        activePiece.position = new Vector2Int(4, boardHeight - 1) - activePiece.pieceData.GetCenter();
+        activePiece.position = new Vector2Int((boardWidth / 2) - 1, boardHeight - 1) - activePiece.pieceData.GetCenter();
         ghostPiece.position = activePiece.position;
 
         if (!activePiece.CheckForEmptySpace(Vector2Int.zero))
@@ -474,13 +482,29 @@ public class GameManager : MonoBehaviour
 
     private void BoardLoss()
     {
-        boards[activeBoard].blocks.ClearAllTiles();
+        boards[activeBoard].BoardLoss();
+
+        if(boards.Count == 1)
+        {
+            GameOver();
+            return;
+        }
+
+        lostBoards.Add(boards[activeBoard]);
+        boards.RemoveAt(activeBoard);
+        activeBoard = activeBoard - 1;
+        if(activeBoard < 0)
+        {
+            activeBoard = 0;
+        }
+        SetActiveBoard(activeBoard);
         SpawnPiece();
     }
 
     private void GameOver()
     {
         // called when all boards are lost
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void DrawGhostPiece()
@@ -559,6 +583,7 @@ public class GameManager : MonoBehaviour
     {
         shopOpen = true;
         shopAnim.Play("shopOpen");
+        AdjustBoardPositions();
     }
 
     public void CloseShop()
@@ -658,6 +683,7 @@ public class GameManager : MonoBehaviour
         boardManager.boardWidth = boardWidth;
         boardManager.boardHeight = boardHeight;
         boardManager.SetupBoard();
+        boardManager.SetInactive();
         boards.Add(boardManager);
         AdjustBoardPositions();
     }
@@ -665,6 +691,12 @@ public class GameManager : MonoBehaviour
     // Resets the board positions to be centered on screen, necessary whenever a board is added/removed
     private void AdjustBoardPositions()
     {
+        foreach (BoardManager board in lostBoards)
+        {
+            Destroy(board.gameObject);
+        }
+        lostBoards.Clear();
+
         const int OFFSET = 6;
         float offset_math = 0;
         for (int i = 0; i < boards.Count; i++)
@@ -725,8 +757,8 @@ public class GameManager : MonoBehaviour
             activePiece.board = boards[activeBoard];
             ghostPiece.board = boards[activeBoard];
         }
-        boards[activeBoard].SetActive();
         boards[prevActiveBoard].SetInactive();
+        boards[activeBoard].SetActive();
     }
 
     // Draws ghost pieces on inactive boards
