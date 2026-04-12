@@ -18,7 +18,7 @@ public class BuyPiece : MonoBehaviour
 
     void Start()
     {
-        //get pieceRenderer script
+        //get pieceRenderer script d
         pieceRendererScript = pieceRenderer.GetComponent<PieceRenderer>();
 
         //chooses a random piece
