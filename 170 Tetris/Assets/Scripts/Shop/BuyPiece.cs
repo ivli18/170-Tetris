@@ -11,18 +11,18 @@ public class BuyPiece : MonoBehaviour
     public GameManager gameManager;
     public GameObject pieceRenderer;
     private PieceRenderer pieceRendererScript;
-    public List<PieceData> pieceList; 
+    //public List<PieceData> pieceList; 
     private PieceData piece;
     private Texture2D pieceTexture;
 
 
     void Start()
     {
-        //get pieceRenderer script d
+        //get pieceRenderer script
         pieceRendererScript = pieceRenderer.GetComponent<PieceRenderer>();
 
         //chooses a random piece
-        PieceData piece = gameManager.RollGatcha();
+        piece = gameManager.RollGatcha();
 
         pieceTexture = new Texture2D(256, 256, TextureFormat.ARGB32, false); // only needs to be created once
         DrawPiece(); // dont draw every update frame, only when the shop piece visual needs to be updated
