@@ -10,7 +10,8 @@ public class BoardManager : MonoBehaviour
     private Tilemap background;
     public Tilemap blocks;
     [SerializeField]
-    private Block tile;
+    private Tile tileBackground;
+    private SpriteRenderer inactiveOverlay;
 
     public int boardHeight = 20; //base tetris is 20 for the visible height, and 40 is the true height; here it will be higher like 50-70
     public int boardWidth = 10; // hesitant to say this should be changable
@@ -24,11 +25,34 @@ public class BoardManager : MonoBehaviour
         grid = GetComponent<Grid>();
         background = transform.Find("Background").GetComponent<Tilemap>();
         blocks = transform.Find("Blocks").GetComponent<Tilemap>();
+        inactiveOverlay = transform.Find("InactiveOverlay").GetComponent<SpriteRenderer>();
     }
 
-    private void SetupBoard()
+    private void Start()
     {
-        // set up the grid size
+        SetupBoard();
+    }
+
+    public void SetupBoard()
+    {
+        for(int i = 0; i < boardWidth; i++)
+        {
+            for( int k = 0; k < boardHeight; k++)
+            {
+                background.SetTile(new Vector3Int(i, k, 0), tileBackground);
+                if((i + k) % 2 == 0)
+                {
+                    background.SetColor(new Vector3Int(i, k, 0), Color.gray1);
+                }
+                else
+                {
+                    background.SetColor(new Vector3Int(i, k, 0), Color.gray2);
+                }
+            }
+        }
+
+        inactiveOverlay.transform.localPosition = new Vector3(boardWidth / 2.0f, boardHeight / 2.0f, 0);
+        inactiveOverlay.transform.localScale = new Vector3(boardWidth, boardHeight, 1);
     }
 
     public void ClearPiece(Piece piece)
@@ -48,7 +72,14 @@ public class BoardManager : MonoBehaviour
         foreach(PieceBlock block in piece.pieceData.GetBlocks())
         {
             blocks.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.block);
-            blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.color);
+            if (piece.position.y + block.position.y < boardHeight)
+            {
+                blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.color);
+            }
+            else
+            {
+                blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), Color.clear);
+            }
         }
     }
 
@@ -60,6 +91,42 @@ public class BoardManager : MonoBehaviour
         {
             blocks.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.block);
             blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), new Color(block.color.r, block.color.g, block.color.b, 0.5f));
+        }
+    }
+
+    public void DrawSwapGhostPiece(Piece piece)
+    {
+        if (piece == null) { return; }
+
+        bool emptySpace = piece.CheckForEmptySpace(new Vector2Int(0, 0), this);
+
+        foreach (PieceBlock block in piece.pieceData.GetBlocks())
+        {
+            if (blocks.GetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0)) == null && ((piece.position.y + block.position.y) < boardHeight))
+            {
+                blocks.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.block);
+                if (emptySpace)
+                {
+                    blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), new Color(0.0f, 1.0f, 0.0f, 0.5f));
+                }
+                else
+                {
+                    blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), new Color(1.0f, 0.0f, 0.0f, 0.5f));
+                }
+            }
+        }
+    }
+
+    public void ClearSwapGhostPiece(Piece piece)
+    {
+        if (piece == null) { return; }
+
+        foreach (PieceBlock block in piece.pieceData.GetBlocks())
+        {
+            if (blocks.GetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0)).a < 1.0f)
+            {
+                blocks.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), null);
+            }
         }
     }
 
@@ -138,5 +205,15 @@ public class BoardManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void SetActive()
+    {
+        inactiveOverlay.enabled = false;
+    }
+
+    public void SetInactive()
+    {
+        inactiveOverlay.enabled = true;
     }
 }

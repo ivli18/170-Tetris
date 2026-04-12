@@ -7,6 +7,7 @@ using static UnityEngine.Audio.ProcessorInstance;
 using UnityEngine.Tilemaps;
 using TMPro;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 public class GameManager : MonoBehaviour
 {
@@ -46,7 +47,6 @@ public class GameManager : MonoBehaviour
     private float lockDelay = 30.0f; //base tetris is 0.5 seconds
     private float lockDelayCurrent = 0.0f;
     private int previewPieceCount = 3;
-    // NOTE FOR ME: MOVE RESET SAYS YOU MAY ONLY STALL FOR 15 MOVES/ROTATIONS BEFORE LOCKING, MOVING DOWN RESETS THIS
     private int stallMoves = 0;
     private static readonly int STALL_MOVES_MAX = 15;
     private float autoshiftDelay = 0.0f; // if any L/R input pressed last frame, reset to zero
@@ -62,8 +62,12 @@ public class GameManager : MonoBehaviour
     private InputAction actionRotateClockwise;
     private InputAction actionRotateCounterclockwise;
     private InputAction actionHold;
-    private InputAction actionsSwitchBoardLeft;
-    private InputAction actionsSwitchBoardRight;
+    private InputAction actionSwitchBoardLeft;
+    private InputAction actionSwitchBoardRight;
+    private InputAction actionSwitchBoard1;
+    private InputAction actionSwitchBoard2;
+    private InputAction actionSwitchBoard3;
+    private InputAction actionSwitchBoard4;
     private InputAction actionsPause;
 
     public Tilemap heldPieceUI;
@@ -76,6 +80,7 @@ public class GameManager : MonoBehaviour
     private Animator shopAnim;
     
     public AudioManager audioManager;
+    public GameObject boardPrefab;
 
     private void Awake()
     {
@@ -99,12 +104,20 @@ public class GameManager : MonoBehaviour
         actionRotateCounterclockwise = InputSystem.actions.FindAction("RotateCounterclockwise");
         actionHold = InputSystem.actions.FindAction("Hold");
         actionsPause = InputSystem.actions.FindAction("Pause");
+        actionSwitchBoardLeft = InputSystem.actions.FindAction("SwitchBoardLeft");
+        actionSwitchBoardRight = InputSystem.actions.FindAction("SwitchBoardRight");
+        actionSwitchBoard1 = InputSystem.actions.FindAction("SwitchBoard1");
+        actionSwitchBoard2 = InputSystem.actions.FindAction("SwitchBoard2");
+        actionSwitchBoard3 = InputSystem.actions.FindAction("SwitchBoard3");
+        actionSwitchBoard4 = InputSystem.actions.FindAction("SwitchBoard4");
 
         currencyTextValue.SetText(points.ToString());
 
         ShufflePieces();
         ShufflePreviewPieces();
         CalculateGravity();
+        AdjustBoardPositions();
+        boards[0].SetActive();
 
         PauseSprite = PauseScreen.GetComponent<SpriteRenderer>();
         shopAnim = ShopUI.GetComponent<Animator>();
@@ -148,6 +161,9 @@ public class GameManager : MonoBehaviour
         {
             ClearGhostPiece();
             boards[activeBoard].ClearPiece(activePiece);
+            ClearSwapGhosts();
+
+            DebugButtons();
 
             if (actionHold.WasPressedThisFrame())
             {
@@ -181,6 +197,8 @@ public class GameManager : MonoBehaviour
             {
                 Pause();
             }
+
+            InputSwitchBoard();
             InputLR();
             InputRotate();
 
@@ -222,6 +240,29 @@ public class GameManager : MonoBehaviour
 
             DrawGhostPiece();
             boards[activeBoard].DrawPiece(activePiece);
+            DrawSwapGhosts();
+        }
+    }
+
+    private void InputSwitchBoard()
+    {
+        if(actionSwitchBoardLeft.WasPressedThisFrame())
+        {
+            int boardToSwitch = activeBoard - 1;
+            if(boardToSwitch < 0) { return; }//{ boardToSwitch = boards.Count - 1; }
+            if(activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
+            {
+                SetActiveBoard(boardToSwitch);
+            }
+        }
+        else if (actionSwitchBoardRight.WasPressedThisFrame())
+        {
+            int boardToSwitch = activeBoard + 1;
+            if (boardToSwitch >= boards.Count) { return; }//{ boardToSwitch = 0; }
+            if (activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
+            {
+                SetActiveBoard(boardToSwitch);
+            }
         }
     }
 
@@ -334,7 +375,7 @@ public class GameManager : MonoBehaviour
         ghostPiece.board = boards[activeBoard];
         ghostPiece.pieceData = Instantiate(piece);
 
-        activePiece.position = new Vector2Int(4, boardHeight) - activePiece.pieceData.GetCenter();
+        activePiece.position = new Vector2Int(4, boardHeight - 1) - activePiece.pieceData.GetCenter();
         ghostPiece.position = activePiece.position;
 
         if (!activePiece.CheckForEmptySpace(Vector2Int.zero))
@@ -375,6 +416,7 @@ public class GameManager : MonoBehaviour
     private void PlacePiece()
     {
         boards[activeBoard].DrawPiece(activePiece);
+        ClearSwapGhosts();
         if (!activePiece.CheckWithinBoard())
         {
             BoardLoss();
@@ -540,11 +582,13 @@ public class GameManager : MonoBehaviour
         PauseSprite.enabled = false;
     }
 
+    // Calculate the gravity based on the current level. Uses official tetris guideline values.
     private void CalculateGravity()
     {
         gravity = Math.Min((1.0f / (float) Math.Pow(0.8f - ((level - 1) * 0.007f), level - 1)) / 60.0f, (float) boardHeight);
     }
 
+    // Set up the gatcha rarity tables
     public void SetupPullTable()
     {
         foreach(PieceData piece in allPieces)
@@ -557,6 +601,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Current implementation means multiples of each piece could appear in the shop. There is a fairly easy fix if we want it.
+    // Roll a piece on the gatcha tables
     public PieceData RollGatcha(int[] weightTable, bool repeats)
     {
         PieceData piece = null;
@@ -599,9 +644,112 @@ public class GameManager : MonoBehaviour
         return piece;
     }
 
+    // Roll a piece on the gatcha tables using the base weight table
     public PieceData RollGatcha()
     {
         return RollGatcha(baseWeightTable, false);
+    }
+
+    // Add a new board to the game
+    public void AddBoard()
+    {
+        GameObject board = Instantiate(boardPrefab);
+        BoardManager boardManager =  board.GetComponent<BoardManager>();
+        boardManager.boardWidth = boardWidth;
+        boardManager.boardHeight = boardHeight;
+        boardManager.SetupBoard();
+        boards.Add(boardManager);
+        AdjustBoardPositions();
+    }
+
+    // Resets the board positions to be centered on screen, necessary whenever a board is added/removed
+    private void AdjustBoardPositions()
+    {
+        const int OFFSET = 6;
+        float offset_math = 0;
+        for (int i = 0; i < boards.Count; i++)
+        {
+            offset_math = ((float) i - ((boards.Count - 1.0f) / 2.0f)) * (OFFSET * 2.0f + boardWidth - 10.0f);
+            boards[i].GetComponent<Transform>().position = new Vector3(offset_math - (boardWidth / 2.0f), -boardHeight / 2.0f, 0);
+        }
+
+        previewPieceUI.GetComponent<Transform>().position = new Vector3(7.5f + offset_math, -4, 0);
+    }
+
+    // Increase/Reduce board size (reducing size currently does not remove out of bounds blocks)
+    public void AddBoardSize(int x, int y)
+    {
+        boardWidth += x;
+        boardHeight += y;
+
+        UpdateBoardSizes();
+    }
+
+    // Updates the size of every board to match gameManager's width = height
+    public void UpdateBoardSizes()
+    {
+        foreach(BoardManager board in boards)
+        {
+            board.boardWidth = boardWidth;
+            board.boardHeight = boardHeight;
+            board.SetupBoard();
+        }
+        AdjustBoardPositions();
+    }
+
+    // Sets a new board to active; does not check to see if the swap is valid
+    public void SetActiveBoard(int boardNum)
+    {
+        int prevActiveBoard = activeBoard;
+        activeBoard = boardNum;
+        if(activePiece != null)
+        {
+            activePiece.board = boards[activeBoard];
+            ghostPiece.board = boards[activeBoard];
+        }
+        boards[activeBoard].SetActive();
+        boards[prevActiveBoard].SetInactive();
+    }
+
+    // Draws ghost pieces on inactive boards
+    private void DrawSwapGhosts()
+    {
+        for(int i = 0; i < boards.Count; i++)
+        {
+            if(i != activeBoard)
+            {
+                boards[i].DrawSwapGhostPiece(activePiece);
+            }
+        }
+    }
+
+    // Clears ghost pieces on inactive boards
+    private void ClearSwapGhosts()
+    {
+        for (int i = 0; i < boards.Count; i++)
+        {
+            if (i != activeBoard)
+            {
+                boards[i].ClearSwapGhostPiece(activePiece);
+            }
+        }
+    }
+
+    // Used only for debug
+    private void DebugButtons()
+    {
+        if(actionSwitchBoard1.WasPressedThisFrame())
+        {
+            AddBoard();
+        }
+        if (actionSwitchBoard2.WasPressedThisFrame())
+        {
+            AddBoardSize(1, 0);
+        }
+        if (actionSwitchBoard3.WasPressedThisFrame())
+        {
+            AddBoardSize(0, 1);
+        }
     }
 }
 
@@ -660,6 +808,19 @@ public class Piece
         foreach(PieceBlock block in pieceData.GetBlocks())
         {
             if(board.blocks.GetTile(new Vector3Int(position.x + block.position.x + offset.x, position.y + block.position.y + offset.y, 0)) != null || !board.PositionInBounds(position + block.position + offset))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public bool CheckForEmptySpace(Vector2Int offset, BoardManager board)
+    {
+        foreach (PieceBlock block in pieceData.GetBlocks())
+        {
+            if (board.blocks.GetTile(new Vector3Int(position.x + block.position.x + offset.x, position.y + block.position.y + offset.y, 0)) != null || !board.PositionInBounds(position + block.position + offset))
             {
                 return false;
             }
