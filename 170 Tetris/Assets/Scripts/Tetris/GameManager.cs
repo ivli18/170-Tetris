@@ -690,6 +690,19 @@ public class GameManager : MonoBehaviour
         UpdateBoardSizes();
     }
 
+    public void AddBoardHeight()
+    {
+        boardHeight ++;
+
+        UpdateBoardSizes();
+    }
+    public void AddBoardWidth()
+    {
+        boardWidth ++;
+
+        UpdateBoardSizes();
+    }
+
     // Updates the size of every board to match gameManager's width = height
     public void UpdateBoardSizes()
     {
