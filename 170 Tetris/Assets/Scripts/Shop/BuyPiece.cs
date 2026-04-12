@@ -9,7 +9,8 @@ public class BuyPiece : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private PieceData pieceData;
     public GameManager gameManager;
-    public PieceRenderer pieceRenderer;
+    public GameObject pieceRenderer;
+    private PieceRenderer pieceRendererScript;
     public List<PieceData> pieceList; 
     private PieceData piece;
     private Texture2D pieceTexture;
@@ -17,6 +18,9 @@ public class BuyPiece : MonoBehaviour
 
     void Start()
     {
+        //get pieceRenderer script
+        pieceRendererScript = pieceRenderer.GetComponent<PieceRenderer>();
+
         //chooses a random piece
         PieceData piece = gameManager.RollGatcha();
 
@@ -39,7 +43,7 @@ public class BuyPiece : MonoBehaviour
     // Should be called whenever the piece changes
     public void DrawPiece()
     {
-        pieceRenderer.RenderToTexture2D(piece, pieceTexture);
+        pieceRendererScript.RenderToTexture2D(piece, pieceTexture);
 
         // Convert the new Texture2D to a Sprite
         Sprite sprite = Sprite.Create(pieceTexture, new Rect(new Vector2(0, 0), new Vector2(256, 256)), new Vector2(0, 0));

@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
     
     public AudioManager audioManager;
     public GameObject boardPrefab;
+    public InputActionAsset myActionAsset; //The file that sets control schemes
 
     private void Awake()
     {
@@ -94,6 +95,7 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
 
         // Default is the existing input system, yet to add toggles
+        myActionAsset.bindingMask = new InputBinding {groups = "Tetris Arrows"};
         // InputSystem.actions.bindingMask = InputBinding.MaskByGroup("Tetris WASD");
         // InputSystem.actions.bindingMask = InputBinding.MaskByGroup("Tetris Arrows");
         actionShiftLeft = InputSystem.actions.FindAction("ShiftLeft");
