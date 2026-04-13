@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Unity.VectorGraphics;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
     private InputAction actionSwitchBoard3;
     private InputAction actionSwitchBoard4;
     private InputAction actionsPause;
+    public UnityEvent onShopOpen;
 
     public Tilemap heldPieceUI;
     public TextMeshProUGUI currencyTextValue;
@@ -584,6 +586,7 @@ public class GameManager : MonoBehaviour
         shopOpen = true;
         shopAnim.Play("shopOpen");
         AdjustBoardPositions();
+        onShopOpen.Invoke();
     }
 
     public void CloseShop()

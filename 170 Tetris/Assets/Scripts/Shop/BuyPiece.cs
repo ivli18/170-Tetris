@@ -26,6 +26,8 @@ public class BuyPiece : MonoBehaviour
 
         pieceTexture = new Texture2D(256, 256, TextureFormat.ARGB32, false); // only needs to be created once
         DrawPiece(); // dont draw every update frame, only when the shop piece visual needs to be updated
+
+        gameManager.onShopOpen.AddListener(OnShopOpen);
     }
 
     // Update is called once per frame
@@ -38,6 +40,12 @@ public class BuyPiece : MonoBehaviour
     {
         //adds piece to bagfull
         gameManager.AddPieceToBag(piece);
+    }
+
+    public void OnShopOpen()
+    {
+        piece = gameManager.RollGatcha();
+        DrawPiece();
     }
 
     // Should be called whenever the piece changes
