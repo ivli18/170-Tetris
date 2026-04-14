@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private bool paused = false;
     private bool gameOver = false;
     private int level = 1;
-    private int points = 0;
+    public int points = 0;
     private int levelRequirement = 1;
     private int lineClears = 0;
     private static int[] LINE_CLEAR_POINTS = { 10, 30, 50, 80, 160 };
@@ -26,9 +26,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public List<PieceData> allPieces;
     private List<PieceData>[] piecePullTables = {new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>() };
+    private List<PieceData>[] piecePullTablesRepeats = { new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>() };
     [SerializeField]
-    public int[] baseWeightTable = { 100, 80, 60, 40, 20, 10 };
+    public int[] baseWeightTable = { 40, 100, 80, 60, 40, 10 };
     public int[] rareWeightTable = { 0, 0, 100, 60, 40, 20 };
+    public int[] priceByRarity = { -30, 20, 30, 40, 50, 75 };
 
     [SerializeField]
     private List<BoardManager> boards;
@@ -76,6 +78,8 @@ public class GameManager : MonoBehaviour
     private InputAction actionSwitchBoard4;
     private InputAction actionsPause;
     public UnityEvent onShopOpen;
+    public UnityEvent onShopClose;
+    public UnityEvent onCurrencyUpdate;
 
     public Tilemap heldPieceUI;
     public TextMeshProUGUI currencyTextValue;
@@ -367,6 +371,7 @@ public class GameManager : MonoBehaviour
 
         previewPieces.Add(bagCurrent[0]);
         bagCurrent.RemoveAt(0);
+        ClearPreviewPieces();
         DrawPreviewPieces();
 
         if (bagCurrent.Count == 0)
@@ -441,11 +446,11 @@ public class GameManager : MonoBehaviour
         if (linesCleared != 0)
         {
             int pointsToAdd = LINE_CLEAR_POINTS[Math.Min(linesCleared - 1, LINE_CLEAR_POINTS.Length - 1)];
-            points += pointsToAdd;
+            //points += pointsToAdd;
             combo += 1;
             lineClears += linesCleared;
             //print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
-            currencyTextValue.SetText(points.ToString());
+            AddCurrency(pointsToAdd);
             audioManager.PlaySoundClear();
             if (lineClears >= levelRequirement)
             {
@@ -457,9 +462,9 @@ public class GameManager : MonoBehaviour
         {
             if(combo > 0)
             {
-                points += (combo * 5);
+                //points += (combo * 5);
                 //print("COMBO: " + (points - (combo * 5)) + " + " + (combo * 5) + " = " + points);
-                currencyTextValue.SetText(points.ToString());
+                AddCurrency(combo * 5);
             }
             combo = -1;
         }
@@ -574,6 +579,13 @@ public class GameManager : MonoBehaviour
         previewPieceUI.ClearAllTiles();
     }
 
+    public void AddCurrency(int currency)
+    {
+        points += currency;
+        currencyTextValue.SetText(points.ToString());
+        onCurrencyUpdate.Invoke();
+    }
+
     private void LevelClear()
     {
         level += 1;
@@ -593,6 +605,7 @@ public class GameManager : MonoBehaviour
     {
         shopOpen = false;
         shopAnim.Play("shopClose");
+        onShopClose.Invoke();
     }
 
     private void Pause()
@@ -625,6 +638,7 @@ public class GameManager : MonoBehaviour
             {
                 piecePullTables[(int)piece.GetRarity()].Add(piece);
             }
+            piecePullTablesRepeats[(int)piece.GetRarity()].Add(piece);
         }
     }
 
@@ -639,7 +653,7 @@ public class GameManager : MonoBehaviour
             int weightSum = 0;
             for (int i = 0; i < weightTable.Length; i++)
             {
-                if (piecePullTables[i].Count != 0)
+                if (piecePullTables[i].Count != 0 || repeats)
                 {
                     weightSum += weightTable[i];
                 }
@@ -647,14 +661,14 @@ public class GameManager : MonoBehaviour
 
             if(weightSum == 0)
             {
-                // add fallback for no tables having a valid roll
+                return null;
             
             }
             int rnd = UnityEngine.Random.Range(0, weightSum);
             int tableToPull = 0;
             for (int i = 0; i < weightTable.Length; i++)
             {
-                if (piecePullTables[i].Count != 0)
+                if (piecePullTables[i].Count != 0 || repeats)
                 {
                     if (rnd < weightTable[i])
                     {
@@ -665,17 +679,38 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            int randPiece = UnityEngine.Random.Range(0, piecePullTables[tableToPull].Count);
-            piece = piecePullTables[tableToPull][randPiece];
+            int randPiece = 0;
+            if(!repeats)
+            {
+                randPiece = UnityEngine.Random.Range(0, piecePullTables[tableToPull].Count);
+                piece = piecePullTables[tableToPull][randPiece];
+                piecePullTables[tableToPull].Remove(piece);
+            }
+            else
+            {
+                randPiece = UnityEngine.Random.Range(0, piecePullTablesRepeats[tableToPull].Count);
+                piece = piecePullTablesRepeats[tableToPull][randPiece];
+            }
         }
 
         return piece;
     }
 
-    // Roll a piece on the gatcha tables using the base weight table
+    // Roll a piece on the gatcha tables using the base weight table no repeats
     public PieceData RollGatcha()
     {
         return RollGatcha(baseWeightTable, false);
+    }
+    // Roll a piece on the gatcha tables using the base weight table
+    public PieceData RollGatcha(bool repeats)
+    {
+        return RollGatcha(baseWeightTable, repeats);
+    }
+
+
+    public void AddToPullList(PieceData piece)
+    {
+        piecePullTables[(int)piece.GetRarity()].Add(piece);
     }
 
     // Add a new board to the game
@@ -689,6 +724,11 @@ public class GameManager : MonoBehaviour
         boardManager.SetInactive();
         boards.Add(boardManager);
         AdjustBoardPositions();
+    }
+
+    public int GetBoardCount()
+    {
+        return boards.Count;
     }
 
     // Resets the board positions to be centered on screen, necessary whenever a board is added/removed
