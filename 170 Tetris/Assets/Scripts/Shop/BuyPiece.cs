@@ -85,7 +85,7 @@ public class BuyPiece : MonoBehaviour
         pieceRendererScript.RenderToTexture2D(piece, pieceTexture);
 
         // Convert the new Texture2D to a Sprite
-        Sprite sprite = Sprite.Create(pieceTexture, new Rect(new Vector2(0, 0), new Vector2(256, 256)), new Vector2(0, 0));
+        Sprite sprite = Sprite.Create(pieceTexture, new Rect(new Vector2(0, 0), new Vector2(256, 256)), new Vector2(0.5f, 0.5f));
 
         GetComponent<Image>().sprite = sprite; // replace the get component with whatever image you want to overwrite
         int price = gameManager.priceByRarity[(int) piece.GetRarity()];
