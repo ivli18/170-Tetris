@@ -169,6 +169,8 @@ public class GameManager : MonoBehaviour
                 SpawnPiece();
                 spawnDelay = 0;
             }
+
+            InputSwitchBoard();
         }
         else
         {
@@ -201,6 +203,10 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            InputSwitchBoard();
+            InputLR();
+            InputRotate();
+
             if (actionHardDrop.WasPressedThisFrame())
             {
                 HardDrop();
@@ -211,10 +217,6 @@ public class GameManager : MonoBehaviour
             {
                 Pause();
             }
-
-            InputSwitchBoard();
-            InputLR();
-            InputRotate();
 
             //check to see if space below active piece is occupied
             if (activePiece.CheckForEmptySpace(Vector2Int.down))
@@ -264,10 +266,13 @@ public class GameManager : MonoBehaviour
         {
             int boardToSwitch = activeBoard - 1;
             if(boardToSwitch < 0) { boardToSwitch = boards.Count - 1; }
-            while(!activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
+            if (activePiece != null)
             {
-                boardToSwitch -= 1;
-                if (boardToSwitch < 0) { boardToSwitch = boards.Count - 1; }
+                while (!activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
+                {
+                    boardToSwitch -= 1;
+                    if (boardToSwitch < 0) { boardToSwitch = boards.Count - 1; }
+                }
             }
             SetActiveBoard(boardToSwitch);
         }
@@ -275,10 +280,13 @@ public class GameManager : MonoBehaviour
         {
             int boardToSwitch = activeBoard + 1;
             if (boardToSwitch > boards.Count - 1) { boardToSwitch = 0; }
-            while (!activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
+            if (activePiece != null)
             {
-                boardToSwitch += 1;
-                if (boardToSwitch > boards.Count - 1) { boardToSwitch = 0; }
+                while (!activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[boardToSwitch]))
+                {
+                    boardToSwitch += 1;
+                    if (boardToSwitch > boards.Count - 1) { boardToSwitch = 0; }
+                }
             }
             SetActiveBoard(boardToSwitch);
         }
@@ -399,6 +407,8 @@ public class GameManager : MonoBehaviour
 
         if (!activePiece.CheckForEmptySpace(Vector2Int.zero))
         {
+            boards[activeBoard].DrawPiece(activePiece);
+            audioManager.PlaySoundPlace();
             BoardLoss();
         }
     }
