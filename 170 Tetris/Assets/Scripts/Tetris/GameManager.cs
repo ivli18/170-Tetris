@@ -82,6 +82,8 @@ public class GameManager : MonoBehaviour
 
     public Tilemap heldPieceUI;
     public TextMeshProUGUI currencyTextValue;
+    public TextMeshProUGUI lineTextValue;
+    public TextMeshProUGUI levelTextValue;
     public Tilemap previewPieceUI;
     
     public GameObject PauseScreen;
@@ -124,6 +126,8 @@ public class GameManager : MonoBehaviour
         actionSwitchBoard4 = InputSystem.actions.FindAction("SwitchBoard4");
 
         currencyTextValue.SetText(points.ToString());
+        levelTextValue.text = level.ToString();
+        lineTextValue.text = lineClears.ToString();
 
         RandomizeBag();
         ShufflePieces();
@@ -479,10 +483,12 @@ public class GameManager : MonoBehaviour
             lineClears += linesCleared;
             //print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
             AddCurrency(pointsToAdd);
+            lineTextValue.text = lineClears.ToString();
             audioManager.PlaySoundClear();
             if (lineClears >= levelRequirement)
             {
-                lineClears = 0;
+                //lineClears = 0;
+                levelRequirement += 10;
                 LevelClear();
             }
         }
@@ -617,6 +623,7 @@ public class GameManager : MonoBehaviour
     private void LevelClear()
     {
         level += 1;
+        levelTextValue.text = level.ToString();
         CalculateGravity();
         OpenShop();
     }
