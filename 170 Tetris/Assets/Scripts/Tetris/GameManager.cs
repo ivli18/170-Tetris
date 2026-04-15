@@ -92,14 +92,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI levelTextValue;
     public Tilemap previewPieceUI;
     
-    public GameObject PauseScreen;
-    private SpriteRenderer PauseSprite;
+    public GameObject PauseUI;
     public GameObject ShopUI;
     private Animator shopAnim;
     
     public AudioManager audioManager;
     public GameObject boardPrefab;
-    public InputActionAsset myActionAsset; //The file that sets control schemes
 
     private void Awake()
     {
@@ -112,25 +110,7 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
-        // Default is the existing input system, yet to add toggles
-        myActionAsset.bindingMask = new InputBinding {groups = "Tetris Arrows"};
-        // InputSystem.actions.bindingMask = InputBinding.MaskByGroup("Tetris WASD");
-        // InputSystem.actions.bindingMask = InputBinding.MaskByGroup("Tetris Arrows");
-        actionShiftLeft = InputSystem.actions.FindAction("ShiftLeft");
-        actionShiftRight = InputSystem.actions.FindAction("ShiftRight");
-        actionHardDrop = InputSystem.actions.FindAction("HardDrop");
-        actionSoftDrop = InputSystem.actions.FindAction("SoftDrop");
-        actionRotateClockwise = InputSystem.actions.FindAction("RotateClockwise");
-        actionRotateCounterclockwise = InputSystem.actions.FindAction("RotateCounterclockwise");
-        actionHold = InputSystem.actions.FindAction("Hold");
-        actionsPause = InputSystem.actions.FindAction("Pause");
-        actionSwitchBoardLeft = InputSystem.actions.FindAction("SwitchBoardLeft");
-        actionSwitchBoardRight = InputSystem.actions.FindAction("SwitchBoardRight");
-        actionSwitchBoard1 = InputSystem.actions.FindAction("SwitchBoard1");
-        actionSwitchBoard2 = InputSystem.actions.FindAction("SwitchBoard2");
-        actionSwitchBoard3 = InputSystem.actions.FindAction("SwitchBoard3");
-        actionSwitchBoard4 = InputSystem.actions.FindAction("SwitchBoard4");
-
+        SchemeDefault();
         currencyTextValue.SetText(points.ToString());
         levelTextValue.text = level.ToString();
         lineTextValue.text = lineClears.ToString();
@@ -142,7 +122,8 @@ public class GameManager : MonoBehaviour
         AdjustBoardPositions();
         boards[0].SetActive();
 
-        PauseSprite = PauseScreen.GetComponent<SpriteRenderer>();
+        PauseUI = GameObject.Find("PauseUI");
+        PauseUI.SetActive(false);
         shopAnim = ShopUI.GetComponent<Animator>();
     }
 
@@ -672,14 +653,14 @@ public class GameManager : MonoBehaviour
         paused = true;
         if(!shopOpen)
         {
-            PauseSprite.enabled = true;
+            PauseUI.SetActive(true);
         }
     }
 
     private void Unpause()
     {
         paused = false;
-        PauseSprite.enabled = false;
+        PauseUI.SetActive(false);
     }
 
     // Calculate the gravity based on the current level. Uses official tetris guideline values.
@@ -951,6 +932,38 @@ public class GameManager : MonoBehaviour
         pointMult = 0.5f;
         CheckLineClear();
         pointMult = 1;
+    }
+    void updateScheme()
+    {
+        actionShiftLeft = InputSystem.actions.FindAction("ShiftLeft");
+        actionShiftRight = InputSystem.actions.FindAction("ShiftRight");
+        actionHardDrop = InputSystem.actions.FindAction("HardDrop");
+        actionSoftDrop = InputSystem.actions.FindAction("SoftDrop");
+        actionRotateClockwise = InputSystem.actions.FindAction("RotateClockwise");
+        actionRotateCounterclockwise = InputSystem.actions.FindAction("RotateCounterclockwise");
+        actionHold = InputSystem.actions.FindAction("Hold");
+        actionsPause = InputSystem.actions.FindAction("Pause");
+        actionSwitchBoardLeft = InputSystem.actions.FindAction("SwitchBoardLeft");
+        actionSwitchBoardRight = InputSystem.actions.FindAction("SwitchBoardRight");
+        actionSwitchBoard1 = InputSystem.actions.FindAction("SwitchBoard1");
+        actionSwitchBoard2 = InputSystem.actions.FindAction("SwitchBoard2");
+        actionSwitchBoard3 = InputSystem.actions.FindAction("SwitchBoard3");
+        actionSwitchBoard4 = InputSystem.actions.FindAction("SwitchBoard4");
+    }
+    public void SchemeWASD()
+    {
+        InputSystem.actions.bindingMask = InputBinding.MaskByGroup("TetrisWASD");
+        updateScheme();
+    }
+    public void SchemeArrows()
+    {
+        InputSystem.actions.bindingMask = InputBinding.MaskByGroup("TetrisArrows");
+        updateScheme();
+    }
+    public void SchemeDefault()
+    {
+        InputSystem.actions.bindingMask = InputBinding.MaskByGroup("Keyboard&Mouse");
+        updateScheme();
     }
 }
 

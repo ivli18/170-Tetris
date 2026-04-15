@@ -606,7 +606,7 @@
                     "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Tetris WASD;Tetris Arrows",
+                    "groups": "Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "RotateClockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -628,7 +628,18 @@
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris WASD",
+                    "groups": "TetrisWASD",
+                    "action": "RotateClockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "71f6c669-ef48-4ad8-bad4-faef8e135fa5",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";TetrisArrows",
                     "action": "RotateClockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -650,7 +661,7 @@
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris WASD",
+                    "groups": "TetrisWASD",
                     "action": "RotateCounterclockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -661,7 +672,7 @@
                     "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris Arrows",
+                    "groups": "TetrisArrows",
                     "action": "RotateCounterclockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -672,7 +683,7 @@
                     "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris WASD;Keyboard&Mouse;Tetris Arrows",
+                    "groups": "Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "RotateCounterclockwise",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -683,7 +694,7 @@
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris Arrows;Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse;TetrisArrows",
                     "action": "ShiftLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -705,7 +716,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris WASD",
+                    "groups": "TetrisWASD",
                     "action": "ShiftLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -716,7 +727,7 @@
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris Arrows;Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse;TetrisArrows",
                     "action": "ShiftRight",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -738,7 +749,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris WASD",
+                    "groups": "TetrisWASD",
                     "action": "ShiftRight",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -760,7 +771,7 @@
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris Arrows",
+                    "groups": "TetrisArrows",
                     "action": "HardDrop",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -771,7 +782,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris WASD",
+                    "groups": "TetrisWASD",
                     "action": "HardDrop",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -782,7 +793,7 @@
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris Arrows;Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "HardDrop",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -793,7 +804,7 @@
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris Arrows;Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse;TetrisArrows",
                     "action": "SoftDrop",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -815,7 +826,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris WASD",
+                    "groups": "TetrisWASD",
                     "action": "SoftDrop",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -826,7 +837,7 @@
                     "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Tetris Arrows;Tetris WASD",
+                    "groups": "Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "Hold",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -837,7 +848,7 @@
                     "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Tetris WASD;Tetris Arrows",
+                    "groups": "Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "Hold",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -903,7 +914,7 @@
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Tetris WASD;Keyboard&Mouse;Tetris Arrows",
+                    "groups": "Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "SwitchBoardLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -925,7 +936,7 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Tetris WASD;Tetris Arrows",
+                    "groups": "Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "SwitchBoardRight",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1566,13 +1577,13 @@
             ]
         },
         {
-            "name": "Tetris WASD",
-            "bindingGroup": "Tetris WASD",
+            "name": "TetrisWASD",
+            "bindingGroup": "TetrisWASD",
             "devices": []
         },
         {
-            "name": "Tetris Arrows",
-            "bindingGroup": "Tetris Arrows",
+            "name": "TetrisArrows",
+            "bindingGroup": "TetrisArrows",
             "devices": []
         }
     ]
