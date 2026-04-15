@@ -90,7 +90,7 @@ public class BoardManager : MonoBehaviour
         foreach (PieceBlock block in piece.pieceData.GetBlocks())
         {
             blocks.SetTile(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), block.block);
-            blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), new Color(block.color.r, block.color.g, block.color.b, 0.5f));
+            blocks.SetColor(new Vector3Int(piece.position.x + block.position.x, piece.position.y + block.position.y, 0), new Color(block.color.r - 0.5f, block.color.g - 0.5f, block.color.b - 0.5f, 0.5f));
         }
     }
 

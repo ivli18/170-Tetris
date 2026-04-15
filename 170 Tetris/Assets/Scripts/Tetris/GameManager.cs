@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     private bool gameOver = false;
     private int level = 1;
     public int points = 0;
-    private int levelRequirement = 1;
+    private int levelRequirement = 10;
     private int lineClears = 0;
     private static int[] LINE_CLEAR_POINTS = { 10, 30, 50, 80, 160 };
 
