@@ -25,12 +25,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     public List<PieceData> allPieces;
-    private List<PieceData>[] piecePullTables = {new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>() };
-    private List<PieceData>[] piecePullTablesRepeats = { new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>() };
-    [SerializeField]
-    public int[] baseWeightTable = { 40, 100, 80, 60, 40, 10 };
-    public int[] rareWeightTable = { 0, 0, 100, 60, 40, 20 };
-    public int[] priceByRarity = { -30, 20, 30, 40, 50, 75 };
+    private List<PieceData>[] piecePullTables = {new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>() };
+    private List<PieceData>[] piecePullTablesRepeats = { new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>(), new List<PieceData>() };
+    public int[] baseWeightTable = { 10, 30, 40, 15, 5 };
+    public int[] rareWeightTable = { 0, 0, 40, 40, 20 };
+    public int[] priceByRarity = { -80, -20, 60, 120, 240};
 
     [SerializeField]
     private List<BoardManager> boards;
@@ -126,6 +125,7 @@ public class GameManager : MonoBehaviour
 
         currencyTextValue.SetText(points.ToString());
 
+        RandomizeBag();
         ShufflePieces();
         ShufflePreviewPieces();
         CalculateGravity();
@@ -442,6 +442,24 @@ public class GameManager : MonoBehaviour
         DrawPreviewPieces();
     }
 
+    // Messy but i dont really care rn
+    private void RandomizeBag()
+    {
+        bagFull.Clear();
+        int[] table = { 1, 0, 0, 0, 0 };
+        AddPieceToBag(RollGatcha(table, false));
+        AddPieceToBag(RollGatcha(table, false));
+        table[0] = 0; table[1] = 1;
+        AddPieceToBag(RollGatcha(table, false));
+        AddPieceToBag(RollGatcha(table, false));
+        table[1] = 0; table[2] = 1;
+        AddPieceToBag(RollGatcha(table, false));
+        table[2] = 0; table[3] = 1;
+        AddPieceToBag(RollGatcha(table, false));
+        table[3] = 0; table[4] = 1;
+        AddPieceToBag(RollGatcha(table, false));
+    }
+
     private void PlacePiece()
     {
         boards[activeBoard].DrawPiece(activePiece);
@@ -644,10 +662,7 @@ public class GameManager : MonoBehaviour
     {
         foreach(PieceData piece in allPieces)
         {
-            if (!bagFull.Contains(piece))
-            {
-                piecePullTables[(int)piece.GetRarity()].Add(piece);
-            }
+            piecePullTables[(int)piece.GetRarity()].Add(piece);
             piecePullTablesRepeats[(int)piece.GetRarity()].Add(piece);
         }
     }

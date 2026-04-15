@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 using UnityEditor;
 #endif
 
-public enum Rarity { D, C, B, A, S, SS};
+public enum Rarity { D, C, B, A, S };
 
 [CreateAssetMenu(fileName = "PieceData", menuName = "Scriptable Objects/PieceData")]
 public class PieceData : ScriptableObject
