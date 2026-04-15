@@ -12,6 +12,8 @@ using Unity.VectorGraphics;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
+public enum Powerup { NONE, SLOW, MULT, GRAVITY };
+
 public class GameManager : MonoBehaviour
 {
     private bool shopOpen = false;
@@ -61,6 +63,10 @@ public class GameManager : MonoBehaviour
     private float autorepeatRate = 0.0f;
     private static readonly float AUTOREPEAT_RATE = 2.0f;
     private int combo = -1;
+
+    // stuff for powerups. not an ideal implementation, but this is a prototype!
+    private int powerupTimer = 0;
+    private float pointMult = 1;
 
     private InputAction actionShiftLeft;
     private InputAction actionShiftRight;
@@ -164,6 +170,12 @@ public class GameManager : MonoBehaviour
 
     private void RunGameLogic()
     {
+        powerupTimer -= 1;
+        if(powerupTimer == 0)
+        {
+            EndPowerup();
+        }
+
         if (activePiece == null)
         {
             spawnDelay++;
@@ -474,15 +486,30 @@ public class GameManager : MonoBehaviour
             return;
         }
         activePiece = null;
+        CheckLineClear();
+        holdUsed = 0;
+        audioManager.PlaySoundPlace();
+    }
+
+    public void CheckLineClear(bool useScoreTable = true)
+    {
         int linesCleared = boards[activeBoard].CheckLineClear();
         if (linesCleared != 0)
         {
-            int pointsToAdd = LINE_CLEAR_POINTS[Math.Min(linesCleared - 1, LINE_CLEAR_POINTS.Length - 1)];
+            int pointsToAdd = 0;
+            if (useScoreTable)
+            {
+                pointsToAdd = LINE_CLEAR_POINTS[Math.Min(linesCleared - 1, LINE_CLEAR_POINTS.Length - 1)];
+            }
+            else
+            {
+                pointsToAdd = linesCleared * 10;
+            }
             //points += pointsToAdd;
             combo += 1;
             lineClears += linesCleared;
             //print("LINE CLEAR: " + (points - pointsToAdd) + " + " + pointsToAdd + " = " + points);
-            AddCurrency(pointsToAdd);
+            AddCurrency((int) (pointsToAdd * pointMult));
             lineTextValue.text = lineClears.ToString();
             audioManager.PlaySoundClear();
             if (lineClears >= levelRequirement)
@@ -494,16 +521,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if(combo > 0)
+            if (combo > 0)
             {
                 //points += (combo * 5);
                 //print("COMBO: " + (points - (combo * 5)) + " + " + (combo * 5) + " = " + points);
-                AddCurrency(combo * 5);
+                AddCurrency((int) (combo * 5 * pointMult));
             }
             combo = -1;
         }
-        holdUsed = 0;
-        audioManager.PlaySoundPlace();
     }
 
     private void HardDrop()
@@ -869,16 +894,64 @@ public class GameManager : MonoBehaviour
         }
         if (actionSwitchBoard2.WasPressedThisFrame())
         {
-            AddBoardSize(1, 0);
+            ActivatePowerup(Powerup.SLOW, 1200);
         }
         if (actionSwitchBoard3.WasPressedThisFrame())
         {
-            AddBoardSize(0, 1);
+            ActivatePowerup(Powerup.MULT, 1200);
         }
         if (actionSwitchBoard4.WasPressedThisFrame())
         {
-            AddHoldSlot();
+            ActivatePowerup(Powerup.GRAVITY, 0);
         }
+    }
+
+    public void ActivatePowerup(Powerup powerup, int timer)
+    {
+        switch(powerup)
+        {
+            case Powerup.SLOW: // Changes gravity to the Level 1 gravity for the duration.
+                gravity = 0.016f;
+                powerupTimer = timer;
+                break;
+            case Powerup.MULT: // Grant 2x points for the duration.
+                pointMult = 2;
+                powerupTimer = timer;
+                break;
+            case Powerup.GRAVITY: // Drop all blocks on a board. Gives 5 points for each line clear as opposed to regular scoring.
+                PowerupGravity();
+                break;
+        }
+    }
+
+    public void EndPowerup()
+    {
+        CalculateGravity();
+        pointMult = 1;
+    }
+
+    public void PowerupGravity()
+    {
+        for (int i = 1; i < boardHeight + 5; i++)
+        {
+            for (int k = 0; k < boardWidth; k++)
+            {
+                if (boards[activeBoard].blocks.GetTile(new Vector3Int(k, i, 0)) != null && boards[activeBoard].blocks.GetTile(new Vector3Int(k, i - 1, 0)) == null)
+                {
+                    int newPos = i - 1;
+                    while(boards[activeBoard].blocks.GetTile(new Vector3Int(k, newPos - 1, 0)) == null && newPos > 0)
+                    {
+                        newPos -= 1;
+                    }
+                    boards[activeBoard].blocks.SetTile(new Vector3Int(k, newPos, 0), boards[activeBoard].blocks.GetTile(new Vector3Int(k, i, 0)));
+                    boards[activeBoard].blocks.SetColor(new Vector3Int(k, newPos, 0), boards[activeBoard].blocks.GetColor(new Vector3Int(k, i, 0)));
+                    boards[activeBoard].blocks.SetTile(new Vector3Int(k, i, 0), null);
+                }
+            }
+        }
+        pointMult = 0.5f;
+        CheckLineClear();
+        pointMult = 1;
     }
 }
 
