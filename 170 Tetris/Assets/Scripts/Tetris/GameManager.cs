@@ -260,7 +260,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-            else
+            if (!activePiece.CheckForEmptySpace(Vector2Int.down))
             {
                 lockDelayCurrent++;
 
@@ -269,7 +269,6 @@ public class GameManager : MonoBehaviour
                     PlacePiece();
                 }
             }
-
             DrawGhostPiece();
             boards[activeBoard].DrawPiece(activePiece);
             DrawSwapGhosts();
