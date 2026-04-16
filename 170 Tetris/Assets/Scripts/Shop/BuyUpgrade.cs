@@ -15,7 +15,11 @@ public class BuyUpgrade : MonoBehaviour
     private Sprite soldText;
     private TextMeshProUGUI textMesh;
     [SerializeField]
-    private int[] costPerPurchase = { 50, 100, 150, 200 };
+    private int costBase = 50;
+    [SerializeField]
+    private int costIncrease = 50;
+    [SerializeField]
+    private int purchaseLimit = 4;
     protected int timesPurchased = 0;
     public UnityEvent OnPurchase;
 
@@ -38,19 +42,20 @@ public class BuyUpgrade : MonoBehaviour
     public void OnClick()
     {
         OnPurchase.Invoke();
-        gameManager.AddCurrency(-costPerPurchase[timesPurchased]);
+        gameManager.AddCurrency((costBase + costIncrease * timesPurchased) * -1);
         SoldOut();
         timesPurchased += 1;
+        gameManager.audioManager.PlaySoundBuy();
     }
 
     public virtual void OnShopOpen()
     {
-        if (timesPurchased < costPerPurchase.Length)
+        if (timesPurchased < purchaseLimit || purchaseLimit == -1)
         {
             GetComponent<Image>().sprite = baseSprite;
             textMesh.enabled = true;
             soldOut = false;
-            textMesh.text = costPerPurchase[timesPurchased].ToString();
+            textMesh.text = (costBase + costIncrease * timesPurchased).ToString();
             OnCurrencyUpdate();
         }
         else
@@ -71,7 +76,7 @@ public class BuyUpgrade : MonoBehaviour
     {
         if (!soldOut)
         {
-            int price = costPerPurchase[timesPurchased];
+            int price = costBase + costIncrease * timesPurchased;
 
             if (gameManager.points < price)
             {

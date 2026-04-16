@@ -16,6 +16,11 @@ public enum Powerup { NONE, SLOW, MULT, GRAVITY };
 
 public class GameManager : MonoBehaviour
 {
+    bool leavingScene = false;
+    public Camera mainCamera;
+    public float shrinkRate; 
+    float time = 0;
+
     private bool shopOpen = false;
     private bool paused = false;
     private bool gameOver = false;
@@ -130,6 +135,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(leavingScene)
+        {
+            time += Time.deltaTime;
+            mainCamera.orthographicSize = 5 + time * shrinkRate;
+            if (time >= 2f)
+            {
+                SceneManager.LoadScene("EndScene");  
+            }
+        }
+
         if(!paused && !shopOpen && !gameOver)
         {
             RunGameLogic();
@@ -536,6 +551,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        audioManager.PlaySoundGameOver();
         lostBoards.Add(boards[activeBoard]);
         boards.RemoveAt(activeBoard);
         activeBoard = activeBoard - 1;
@@ -550,7 +566,9 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         // called when all boards are lost
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        gameOver = true;  
+        leavingScene = true;
+        audioManager.PlaySoundGameOver();
     }
 
     private void DrawGhostPiece()
@@ -630,6 +648,11 @@ public class GameManager : MonoBehaviour
         level += 1;
         levelTextValue.text = level.ToString();
         CalculateGravity();
+        // decrease lock delay after 20g
+        if(gravity > 20.0f)
+        {
+            lockDelay = Math.Max(lockDelay * 0.9f, 8.0f); // cap at 8 frames of delay minimum
+        }
         OpenShop();
     }
 
