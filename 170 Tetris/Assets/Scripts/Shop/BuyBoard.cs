@@ -10,8 +10,13 @@ public class BuyBoard : BuyUpgrade
 {
     public override void OnShopOpen()
     {
-        timesPurchased = gameManager.GetBoardCount() - 1;
-
-        base.OnShopOpen();
+        if (gameManager.GetBoardCount() >= 3)
+        {
+            SoldOut();
+        }
+        else
+        {
+            base.OnShopOpen();
+        }
     }
 }

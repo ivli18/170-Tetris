@@ -551,6 +551,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        audioManager.PlaySoundGameOver();
         lostBoards.Add(boards[activeBoard]);
         boards.RemoveAt(activeBoard);
         activeBoard = activeBoard - 1;

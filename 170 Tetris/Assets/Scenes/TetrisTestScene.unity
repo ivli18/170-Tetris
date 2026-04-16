@@ -5849,7 +5849,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuyUpgrade
   gameManager: {fileID: 462505973}
   soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
-  costPerPurchase: 3c0000005a00000078000000
+  costBase: 120
+  costIncrease: 60
+  purchaseLimit: 3
   OnPurchase:
     m_PersistentCalls:
       m_Calls:
@@ -6014,7 +6016,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuyBoard
   gameManager: {fileID: 462505973}
   soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
-  costPerPurchase: 7800000078000000
+  costBase: 240
+  costIncrease: 240
+  purchaseLimit: -1
   OnPurchase:
     m_PersistentCalls:
       m_Calls:
@@ -6767,7 +6771,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuyUpgrade
   gameManager: {fileID: 462505973}
   soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
-  costPerPurchase: 3c0000005a0000007800000096000000
+  costBase: 120
+  costIncrease: 60
+  purchaseLimit: 3
   OnPurchase:
     m_PersistentCalls:
       m_Calls:
@@ -7171,7 +7177,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuyUpgrade
   gameManager: {fileID: 462505973}
   soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
-  costPerPurchase: 64000000c80000002c010000
+  costBase: 360
+  costIncrease: 120
+  purchaseLimit: 2
   OnPurchase:
     m_PersistentCalls:
       m_Calls:
