@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using TMPro;
 
 
-public class BuyPiece : MonoBehaviour
+public class BuyGrabBag : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private PieceData pieceData;
@@ -15,10 +15,20 @@ public class BuyPiece : MonoBehaviour
     //public List<PieceData> pieceList; 
     private PieceData piece;
     private Texture2D pieceTexture;
+    private Sprite pieceSprite;
     private bool soldOut = false;
+    private Sprite bagSprite;
     [SerializeField]
     private Sprite soldText;
     private TextMeshProUGUI textMesh;
+    [SerializeField]
+    private int price = 40;
+    [SerializeField]
+    private int freePulls = 0;
+
+    public enum RarityTable { NORMAL, RARE };
+    [SerializeField]
+    private RarityTable table;
 
 
     void Start()
@@ -28,17 +38,27 @@ public class BuyPiece : MonoBehaviour
 
         textMesh = GetComponentInChildren<TextMeshProUGUI>();
 
-        //chooses a random piece
-        piece = gameManager.RollGatcha();
+        bagSprite = GetComponent<Image>().sprite;
 
         pieceTexture = new Texture2D(256, 256, TextureFormat.ARGB32, false); // only needs to be created once
-        DrawPiece(); // dont draw every update frame, only when the shop piece visual needs to be updated
 
         gameManager.onShopOpen.AddListener(OnShopOpen);
         gameManager.onShopClose.AddListener(OnShopClose);
         gameManager.onCurrencyUpdate.AddListener(OnCurrencyUpdate);
 
         textMesh.enabled = false;
+    }
+
+    private void RollGatcha()
+    {
+        if (table == RarityTable.NORMAL)
+        {
+            piece = gameManager.RollGatcha();
+        }
+        else
+        {
+            piece = gameManager.RollGatcha(gameManager.rareWeightTable, false);
+        }
     }
 
     // Update is called once per frame
@@ -51,23 +71,32 @@ public class BuyPiece : MonoBehaviour
     {
         //adds piece to bagfull
         gameManager.AddPieceToBag(piece);
-        gameManager.AddCurrency(gameManager.priceByRarity[(int)piece.GetRarity()] * -1);
+        if (freePulls > 0)
+        {
+            freePulls--;
+        }
+        else
+        {
+            gameManager.AddCurrency(-price);
+        }
         SoldOut();
+        GetComponent<Image>().sprite = pieceSprite;
         gameManager.audioManager.PlaySoundBuy();
+        // show the piece getting added
     }
 
     public void OnShopOpen()
     {
-        piece = gameManager.RollGatcha();
+        RollGatcha();
         if (piece != null)
         {
             soldOut = false;
             DrawPiece();
             OnCurrencyUpdate();
+            GetComponent<Image>().sprite = bagSprite;
         }
         else
         {
-            GetComponent<Image>().sprite = soldText;
             SoldOut();
         }
     }
@@ -87,10 +116,9 @@ public class BuyPiece : MonoBehaviour
         pieceRendererScript.RenderToTexture2D(piece, pieceTexture);
 
         // Convert the new Texture2D to a Sprite
-        Sprite sprite = Sprite.Create(pieceTexture, new Rect(new Vector2(0, 0), new Vector2(256, 256)), new Vector2(0.5f, 0.5f));
+        pieceSprite = Sprite.Create(pieceTexture, new Rect(new Vector2(0, 0), new Vector2(256, 256)), new Vector2(0.5f, 0.5f));
 
-        GetComponent<Image>().sprite = sprite; // replace the get component with whatever image you want to overwrite
-        int price = gameManager.priceByRarity[(int) piece.GetRarity()];
+        // GetComponent<Image>().sprite = sprite; // replace the get component with whatever image you want to overwrite
         if(price > 0)
         {
             textMesh.text = price.ToString();
@@ -108,6 +136,7 @@ public class BuyPiece : MonoBehaviour
     public void SoldOut()
     {
         GetComponent<Button>().interactable = false;
+        GetComponent<Image>().sprite = soldText;
         textMesh.enabled = false;
         soldOut = true;
     }
@@ -116,8 +145,13 @@ public class BuyPiece : MonoBehaviour
     {
         if (!soldOut)
         {
-            int price = gameManager.priceByRarity[(int)piece.GetRarity()];
-            if (price < 0)
+            if(freePulls > 0)
+            {
+                textMesh.color = Color.white;
+                GetComponent<Button>().interactable = true;
+                textMesh.text = "FREE";
+            }
+            else if (price < 0)
             {
 
             }

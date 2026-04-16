@@ -2255,7 +2255,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 834702932}
-        m_TargetAssemblyTypeName: BuyPiece, Assembly-CSharp
+        m_TargetAssemblyTypeName: BuyGrabBag, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -2278,17 +2278,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 2100000, guid: 88d37affeeb40a241848eda486aa0dba, type: 2}
+  m_Color: {r: 1, g: 0.9703845, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
+  m_Sprite: {fileID: 5943414610713724454, guid: deada014078c60e46b1cde723ee01651, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -2313,12 +2313,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 834702927}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10582587de66a074f9a490a07ffc2830, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a4189196d8f8ba4e913e1011f9269b8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BuyPiece
+  m_EditorClassIdentifier: Assembly-CSharp::BuyGrabBag
   gameManager: {fileID: 462505973}
   pieceRenderer: {fileID: 1209942600}
   soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
+  price: 120
+  freePulls: 1
+  table: 1
 --- !u!114 &834702933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8379,7 +8382,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1816702627}
-        m_TargetAssemblyTypeName: BuyPiece, Assembly-CSharp
+        m_TargetAssemblyTypeName: BuyGrabBag, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -8410,9 +8413,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
+  m_Sprite: {fileID: 5943414610713724454, guid: deada014078c60e46b1cde723ee01651, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -8437,12 +8440,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1816702622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10582587de66a074f9a490a07ffc2830, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a4189196d8f8ba4e913e1011f9269b8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BuyPiece
+  m_EditorClassIdentifier: Assembly-CSharp::BuyGrabBag
   gameManager: {fileID: 462505973}
   pieceRenderer: {fileID: 1209942600}
   soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
+  price: 40
+  freePulls: 0
+  table: 0
 --- !u!114 &1816702628
 MonoBehaviour:
   m_ObjectHideFlags: 0
