@@ -6,7 +6,9 @@ public class AudioManager : MonoBehaviour
     public AudioSource soundClear;
     public AudioSource soundBuy;
     public AudioSource soundStart;
+    public AudioSource soundGameOver;
     private AudioSource audioSource;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,5 +34,10 @@ public class AudioManager : MonoBehaviour
     public void PlaySoundStart()
     {
         soundStart.Play();
+    }
+
+    public void PlaySoundGameOver()
+    {
+        soundGameOver.Play();
     }
 }

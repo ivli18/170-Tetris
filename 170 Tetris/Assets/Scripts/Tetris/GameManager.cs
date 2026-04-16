@@ -16,6 +16,11 @@ public enum Powerup { NONE, SLOW, MULT, GRAVITY };
 
 public class GameManager : MonoBehaviour
 {
+    bool leavingScene = false;
+    public Camera mainCamera;
+    public float shrinkRate; 
+    float time = 0;
+
     private bool shopOpen = false;
     private bool paused = false;
     private bool gameOver = false;
@@ -130,6 +135,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(leavingScene)
+        {
+            time += Time.deltaTime;
+            mainCamera.orthographicSize = 5 + time * shrinkRate;
+            if (time >= 2f)
+            {
+                SceneManager.LoadScene("EndScene");  
+            }
+        }
+
         if(!paused && !shopOpen && !gameOver)
         {
             RunGameLogic();
@@ -550,7 +565,9 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         // called when all boards are lost
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        gameOver = true;  
+        leavingScene = true;
+        audioManager.PlaySoundGameOver();
     }
 
     private void DrawGhostPiece()
