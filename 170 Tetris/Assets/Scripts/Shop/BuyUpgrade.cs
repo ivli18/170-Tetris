@@ -45,6 +45,7 @@ public class BuyUpgrade : MonoBehaviour
         gameManager.AddCurrency((costBase + costIncrease * timesPurchased) * -1);
         SoldOut();
         timesPurchased += 1;
+        gameManager.audioManager.PlaySoundBuy();
     }
 
     public virtual void OnShopOpen()
