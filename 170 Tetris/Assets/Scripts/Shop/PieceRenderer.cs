@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class PieceRenderer : MonoBehaviour
 {
-    private Camera camera;
+    private Camera cameraComponent;
     [SerializeField]
     private RenderTexture renderTexture;
     [SerializeField]
@@ -13,7 +13,9 @@ public class PieceRenderer : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        camera = GetComponent<Camera>();
+        cameraComponent = GetComponent<Camera>();
+        renderTexture = new RenderTexture(renderTexture.descriptor);
+        cameraComponent.targetTexture = renderTexture;
     }
 
     // Update is called once per frame
@@ -31,7 +33,7 @@ public class PieceRenderer : MonoBehaviour
             tilemap.SetTile(new Vector3Int(block.position.x - pieceData.GetCenter().x, block.position.y - pieceData.GetCenter().y, 0), block.block);
             tilemap.SetColor(new Vector3Int(block.position.x - pieceData.GetCenter().x, block.position.y - pieceData.GetCenter().y, 0), block.color);
         }
-        camera.Render();
+        cameraComponent.Render();
         RenderTexture.active = renderTexture;
         texture.ReadPixels(new Rect(0, 0, 256, 256), 0, 0);
         texture.Apply();
