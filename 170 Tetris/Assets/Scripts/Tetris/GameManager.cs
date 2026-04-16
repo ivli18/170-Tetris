@@ -648,6 +648,11 @@ public class GameManager : MonoBehaviour
         level += 1;
         levelTextValue.text = level.ToString();
         CalculateGravity();
+        // decrease lock delay after 20g
+        if(gravity > 20.0f)
+        {
+            lockDelay = Math.Max(lockDelay * 0.9f, 8.0f); // cap at 8 frames of delay minimum
+        }
         OpenShop();
     }
 
