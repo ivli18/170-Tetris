@@ -938,7 +938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   mainCamera: {fileID: 299236235}
-  shrinkRate: 1000
+  shrinkRate: 10000
   points: 0
   allPieces:
   - {fileID: 11400000, guid: 9d50c75a51655ed42a760951b5fa6f11, type: 2}
@@ -5114,7 +5114,8 @@ MonoBehaviour:
   soundPlace: {fileID: 1052071421}
   soundClear: {fileID: 774005797}
   soundBuy: {fileID: 1034345295}
-  soundStart: {fileID: 1675262460}
+  soundStart: {fileID: 0}
+  soundGameOver: {fileID: 1675262460}
 --- !u!4 &1675262458
 Transform:
   m_ObjectHideFlags: 0
@@ -5241,7 +5242,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 88e36a9aedc138b4985a4aa9124f2a0c, type: 3}
+  m_Resource: {fileID: 8300000, guid: fe97ca3843eeb524382fc10b540be607, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
