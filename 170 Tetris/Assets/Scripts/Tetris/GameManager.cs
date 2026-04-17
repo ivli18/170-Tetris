@@ -569,6 +569,9 @@ public class GameManager : MonoBehaviour
         gameOver = true;  
         leavingScene = true;
         audioManager.PlaySoundGameOver();
+        EndManager.levelCount = level;
+        EndManager.linesCleared = lineClears;
+
     }
 
     private void DrawGhostPiece()
