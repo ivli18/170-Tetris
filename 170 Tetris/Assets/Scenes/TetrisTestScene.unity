@@ -1218,6 +1218,7 @@ MonoBehaviour:
   ShopUI: {fileID: 1255321125}
   audioManager: {fileID: 1675262457}
   boardPrefab: {fileID: 496542050757692436, guid: 5981201bb93ba8c40b53496dfef73f1a, type: 3}
+  mainUI: {fileID: 1935711622}
 --- !u!4 &462505974
 Transform:
   m_ObjectHideFlags: 0
@@ -5623,7 +5624,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.9094692}
   m_AnchorMax: {x: 0.17559333, y: 1}
-  m_AnchoredPosition: {x: 2.500061, y: -3.5}
+  m_AnchoredPosition: {x: 2.5, y: -3.5}
   m_SizeDelta: {x: 5, y: -5.824898}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1298391128
