@@ -39,7 +39,6 @@ public class EndManager : MonoBehaviour
     {
         leavingScene = true;
         audioManager.PlaySoundStart();
-        hideUI();
     }
 
     public void hideUI()
