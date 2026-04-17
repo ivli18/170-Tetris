@@ -33,5 +33,12 @@ public class StartManager : MonoBehaviour
     {
         leavingScene = true;
         audioManager.PlaySoundStart();
+        EndManager.levelCount = 0;
+        EndManager.linesCleared = 0;
+        EndManager endManager = GetComponent<EndManager>();
+        if(endManager != null)        
+        {
+            endManager.hideUI();
+        }
     }
 }

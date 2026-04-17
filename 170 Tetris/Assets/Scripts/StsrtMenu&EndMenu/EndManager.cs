@@ -3,6 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class EndManager : MonoBehaviour
 {
+    public GameObject levelTitle, linesTitle;
+    public static int levelCount;
+    public static int linesCleared;
+    public TMPro.TextMeshProUGUI levelText;
+    public TMPro.TextMeshProUGUI linesText;
     bool leavingScene = false;
     public Camera mainCamera;
     public float shrinkRate; 
@@ -11,7 +16,8 @@ public class EndManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        levelText.SetText(levelCount.ToString());
+        linesText.SetText(linesCleared.ToString());
     }
 
     // Update is called once per frame
@@ -33,5 +39,13 @@ public class EndManager : MonoBehaviour
     {
         leavingScene = true;
         audioManager.PlaySoundStart();
+    }
+
+    public void hideUI()
+    {
+        levelTitle.SetActive(false);
+        linesTitle.SetActive(false);
+        levelText.gameObject.SetActive(false);
+        linesText.gameObject.SetActive(false);
     }
 }
