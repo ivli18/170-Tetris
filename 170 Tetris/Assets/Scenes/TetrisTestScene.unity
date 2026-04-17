@@ -1152,7 +1152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   mainCamera: {fileID: 299236235}
   shrinkRate: 900
-  points: 0
+  points: 200
   allPieces:
   - {fileID: 11400000, guid: 9d50c75a51655ed42a760951b5fa6f11, type: 2}
   - {fileID: 11400000, guid: 40768a87e030a664fa2f4439d7817151, type: 2}
