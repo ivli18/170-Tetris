@@ -102,6 +102,7 @@ public class GameManager : MonoBehaviour
     
     public AudioManager audioManager;
     public GameObject boardPrefab;
+    public GameObject mainUI; 
 
     private void Awake()
     {
@@ -564,6 +565,7 @@ public class GameManager : MonoBehaviour
         audioManager.PlaySoundGameOver();
         EndManager.levelCount = level;
         EndManager.linesCleared = lineClears;
+        mainUI.SetActive(false);
 
     }
 
