@@ -74,10 +74,10 @@ public class BuyPowerup : MonoBehaviour
                 tooltipText.text = "Reduce the gravity for this level.";
                 break;
             case 1:
-                tooltipText.text = "Line clears grant double points this level.";
+                tooltipText.text = "Line clears grant double currency this level.";
                 break;
             case 2:
-                tooltipText.text = "Drop all blocks on the active board, granting 5 points per line cleared.";
+                tooltipText.text = "Drop all blocks on the active board, granting 5 currency per line cleared.";
                 break;
         }
     }

@@ -958,7 +958,7 @@
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "SwitchBoard1",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -969,7 +969,7 @@
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "SwitchBoard2",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -980,7 +980,7 @@
                     "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse;TetrisWASD;TetrisArrows",
                     "action": "SwitchBoard3",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -991,7 +991,7 @@
                     "path": "<Keyboard>/4",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";TetrisArrows;TetrisWASD;Keyboard&Mouse",
                     "action": "SwitchBoard4",
                     "isComposite": false,
                     "isPartOfComposite": false

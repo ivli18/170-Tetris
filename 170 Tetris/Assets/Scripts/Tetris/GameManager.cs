@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
             boards[activeBoard].ClearPiece(activePiece);
             ClearSwapGhosts();
 
-            DebugButtons();
+            //DebugButtons();
 
             if (actionHold.WasPressedThisFrame())
             {
@@ -294,6 +294,48 @@ public class GameManager : MonoBehaviour
                 }
             }
             SetActiveBoard(boardToSwitch);
+        }
+        if (actionSwitchBoard1.WasPressedThisFrame())
+        {
+            if (activePiece != null)
+            {
+                if (activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[0]))
+                {
+                    SetActiveBoard(0);
+                }
+            }
+            else
+            {
+                SetActiveBoard(0);
+            }
+        }
+        if (actionSwitchBoard2.WasPressedThisFrame() && boards.Count >= 2)
+        {
+            if (activePiece != null)
+            {
+                if (activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[1]))
+                {
+                    SetActiveBoard(1);
+                }
+            }
+            else
+            {
+                SetActiveBoard(1);
+            }
+        }
+        if (actionSwitchBoard3.WasPressedThisFrame() && boards.Count >= 3)
+        {
+            if (activePiece != null)
+            {
+                if (activePiece.CheckForEmptySpace(new Vector2Int(0, 0), boards[2]))
+                {
+                    SetActiveBoard(2);
+                }
+            }
+            else
+            {
+                SetActiveBoard(2);
+            }
         }
     }
 
