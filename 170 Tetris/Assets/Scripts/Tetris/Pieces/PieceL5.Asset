@@ -29,7 +29,7 @@ MonoBehaviour:
   - position: {x: 3, y: 1}
     block: {fileID: 11400000, guid: 90e3f86c4137ea74b95b633b4ac17f83, type: 2}
     color: {r: 0.627451, g: 0.3215686, b: 0.1764706, a: 1}
-  rarity: 1
+  rarity: 2
   wallkickOffsets:
   - offsets:
     - {x: 0, y: 0}

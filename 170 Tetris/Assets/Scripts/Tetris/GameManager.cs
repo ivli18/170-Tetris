@@ -507,11 +507,11 @@ public class GameManager : MonoBehaviour
         bagFull.Clear();
         int[] table = { 1, 0, 0, 0, 0 };
         AddPieceToBag(RollGatcha(table, false));
-        AddPieceToBag(RollGatcha(table, false));
         table[0] = 0; table[1] = 1;
         AddPieceToBag(RollGatcha(table, false));
         AddPieceToBag(RollGatcha(table, false));
         table[1] = 0; table[2] = 1;
+        AddPieceToBag(RollGatcha(table, false));
         AddPieceToBag(RollGatcha(table, false));
         table[2] = 0; table[3] = 1;
         AddPieceToBag(RollGatcha(table, false));

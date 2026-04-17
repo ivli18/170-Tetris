@@ -1186,6 +1186,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8bbe8d208a9dd38418ab823043daa381, type: 2}
   - {fileID: 11400000, guid: 7a43b01cd24017449882642dcafca28a, type: 2}
   - {fileID: 11400000, guid: fbc6dfb49e463774c9fbbf0dd6be8a29, type: 2}
+  - {fileID: 11400000, guid: 577caf0db5b803f4282e5e3ac7ceb20d, type: 2}
+  - {fileID: 11400000, guid: a4ae494a3b1f38b438dd91ecb2ae10f7, type: 2}
+  - {fileID: 11400000, guid: d1aca13229d8709409a2dc87215e3056, type: 2}
   baseWeightTable: 0a0000001e000000280000000f00000005000000
   rareWeightTable: 0000000000000000280000002800000014000000
   priceByRarity: b0ffffffecffffff3c00000078000000f0000000
@@ -2533,7 +2536,7 @@ MonoBehaviour:
   gameManager: {fileID: 462505973}
   pieceRenderer: {fileID: 1209942600}
   soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
-  price: 120
+  price: 100
   freePulls: 1
   table: 1
 --- !u!114 &834702933
@@ -8635,7 +8638,7 @@ MonoBehaviour:
   pieceRenderer: {fileID: 1209942600}
   soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
   price: 40
-  freePulls: 0
+  freePulls: 3
   table: 0
 --- !u!114 &1816702628
 MonoBehaviour:
