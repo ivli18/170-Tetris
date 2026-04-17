@@ -70,7 +70,6 @@ public class GameManager : MonoBehaviour
     private int combo = -1;
 
     // stuff for powerups. not an ideal implementation, but this is a prototype!
-    private int powerupTimer = 0;
     private float pointMult = 1;
 
     private InputAction actionShiftLeft;
@@ -166,12 +165,6 @@ public class GameManager : MonoBehaviour
 
     private void RunGameLogic()
     {
-        powerupTimer -= 1;
-        if(powerupTimer == 0)
-        {
-            EndPowerup();
-        }
-
         if (activePiece == null)
         {
             spawnDelay++;
@@ -648,6 +641,7 @@ public class GameManager : MonoBehaviour
 
     private void LevelClear()
     {
+        EndPowerup();
         level += 1;
         levelTextValue.text = level.ToString();
         CalculateGravity();
@@ -916,13 +910,11 @@ public class GameManager : MonoBehaviour
     {
         switch(powerup)
         {
-            case Powerup.SLOW: // Changes gravity to the Level 1 gravity for the duration.
-                gravity = 0.016f;
-                powerupTimer = timer;
+            case Powerup.SLOW: // Changes gravity to 1/5 the current for the level.
+                gravity = Math.Min(gravity * 0.20f, 4.0f);
                 break;
-            case Powerup.MULT: // Grant 2x points for the duration.
+            case Powerup.MULT: // Grant 2x points for the level.
                 pointMult = 2;
-                powerupTimer = timer;
                 break;
             case Powerup.GRAVITY: // Drop all blocks on a board. Gives 5 points for each line clear as opposed to regular scoring.
                 PowerupGravity();

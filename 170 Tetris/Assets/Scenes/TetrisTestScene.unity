@@ -8595,8 +8595,8 @@ GameObject:
   - component: {fileID: 1881810784}
   - component: {fileID: 1881810783}
   - component: {fileID: 1881810782}
-  - component: {fileID: 1881810781}
   - component: {fileID: 1881810780}
+  - component: {fileID: 1881810785}
   m_Layer: 5
   m_Name: PowerupButton
   m_TagString: Untagged
@@ -8670,38 +8670,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &1881810781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1881810778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13f3f19026d66c549b5236971a4cce93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BuyUpgrade
-  gameManager: {fileID: 462505973}
-  soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
-  costBase: 360
-  costIncrease: 120
-  purchaseLimit: 2
-  OnPurchase:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 462505973}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: AddHoldSlot
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1881810782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8746,8 +8714,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1881810781}
-        m_TargetAssemblyTypeName: BuyUpgrade, Assembly-CSharp
+      - m_Target: {fileID: 1881810785}
+        m_TargetAssemblyTypeName: BuyPowerup, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -8796,6 +8764,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1881810778}
   m_CullTransparentMesh: 1
+--- !u!114 &1881810785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881810778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd3c4d889c534943bb7a1b76caff0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuyPowerup
+  gameManager: {fileID: 462505973}
+  soldText: {fileID: 21300000, guid: 0c082be345fa84643a4838d925d8fe1d, type: 3}
+  prices: f000000078000000f0000000
+  powerupSprites:
+  - {fileID: 6385317735691862802, guid: 639c7121226b0a3479ed469a20807c94, type: 3}
+  - {fileID: -5909346713540069213, guid: 52acaba570346d14cb98fc277bec9fa3, type: 3}
+  - {fileID: -2777519593576174663, guid: b72e6a115739de34298dde005cf447ca, type: 3}
+  OnPurchase:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1935711622
 GameObject:
   m_ObjectHideFlags: 0
