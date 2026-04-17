@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
     public GameObject boardPrefab;
     public GameObject mainUI;
     private static int controlScheme = 0;
+    private int delayShopOpen = 1;
 
     private void Awake()
     {
@@ -147,6 +148,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        delayShopOpen -= 1;
+        if(delayShopOpen == 0)
+        {
+            OpenShop();
+        }
         if(leavingScene)
         {
             time += Time.deltaTime;
