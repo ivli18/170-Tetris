@@ -102,7 +102,8 @@ public class GameManager : MonoBehaviour
     
     public AudioManager audioManager;
     public GameObject boardPrefab;
-    public GameObject mainUI; 
+    public GameObject mainUI;
+    private static int controlScheme = 0;
 
     private void Awake()
     {
@@ -115,7 +116,18 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
-        SchemeDefault();
+        switch(controlScheme)
+        {
+            case 0:
+                SchemeDefault();
+                break;
+            case 1:
+                SchemeArrows();
+                break;
+            case 2:
+                SchemeWASD();
+                break;
+        }
         currencyTextValue.SetText(points.ToString());
         levelTextValue.text = level.ToString();
         lineTextValue.text = lineClears.ToString();
@@ -1016,16 +1028,19 @@ public class GameManager : MonoBehaviour
     {
         InputSystem.actions.bindingMask = InputBinding.MaskByGroup("TetrisWASD");
         updateScheme();
+        controlScheme = 2;
     }
     public void SchemeArrows()
     {
         InputSystem.actions.bindingMask = InputBinding.MaskByGroup("TetrisArrows");
         updateScheme();
+        controlScheme = 1;
     }
     public void SchemeDefault()
     {
         InputSystem.actions.bindingMask = InputBinding.MaskByGroup("Keyboard&Mouse");
         updateScheme();
+        controlScheme = 0;
     }
 }
 
